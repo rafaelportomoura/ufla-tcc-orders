@@ -1,0 +1,152 @@
+{
+  "cSpell.enabled": true,
+  "cSpell.language": "en,pt-BR",
+  "cSpell.words": [
+    "altamente",
+    "ampla",
+    "aplicação",
+    "aplicativos",
+    "arquivo",
+    "baseado",
+    "bibliotecas",
+    "camelcase",
+    "código",
+    "começar",
+    "Compra",
+    "Conjunto",
+    "construir",
+    "Consulte",
+    "Cooldown",
+    "criação",
+    "criar",
+    "desenvolver",
+    "detalhes",
+    "disponível",
+    "distribuída",
+    "distribuído",
+    "escalar",
+    "escalável",
+    "estática",
+    "estrutura",
+    "Fácil",
+    "facilitar",
+    "Fastify",
+    "fornece",
+    "implantar",
+    "interagir",
+    "lado",
+    "Licença",
+    "manutenção",
+    "microsserviço",
+    "microsserviços",
+    "modelo",
+    "mongodb",
+    "Moura",
+    "nuvem",
+    "obter",
+    "oferece",
+    "oficiais",
+    "partida",
+    "permite",
+    "plataforma",
+    "ponto",
+    "programática",
+    "recursos",
+    "repositório",
+    "serviços",
+    "snakecasejs",
+    "Tecnologias",
+    "tipado",
+    "tipos",
+    "ufla",
+    "Utilizadas",
+    "verificação",
+    "Vieira"
+  ],
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
+    "source.fixAll.eslint": "never"
+  },
+
+  "eslint.enable": true,
+
+  "files.autoSave": "onFocusChange",
+  "files.exclude": {
+    "**/.git": true
+  },
+  "files.associations": {
+    ".env*": "properties",
+    ".prettierrc": "json"
+  },
+
+  "prettier.enable": true,
+  "prettier.configPath": ".prettierrc",
+  "prettier.ignorePath": ".prettierignore",
+
+  "[json]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": false,
+      "source.fixAll": false
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "editor.tabSize": 2
+  },
+
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.tabSize": 2
+  },
+
+  "[yaml]": {
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "advanced",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": false,
+      "source.fixAll": false
+    },
+    "editor.defaultFormatter": "kennylong.kubernetes-yaml-formatter",
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.tabSize": 4,
+    "editor.detectIndentation": true,
+    "editor.indentSize": "tabSize"
+  },
+
+  "material-icon-theme.folders.associations": {
+    "business": "Core",
+    "services": "Job",
+    "handlers": "Public",
+    "adapters": "Shared",
+    "exceptions": "Error"
+  },
+
+  "[json][yaml]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "never",
+      "source.fixAll": "never"
+    }
+  },
+
+  "workbench.iconTheme": "material-icon-theme"
+}

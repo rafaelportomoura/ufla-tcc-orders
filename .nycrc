@@ -1,0 +1,13 @@
+{
+  "all": true,
+  "check-coverage": true,
+  "extension": [".ts"],
+  "include": ["app/src/**/*.ts"],
+  "exclude": ["app/src/constants/*.ts", "app/src/configs/*.ts", "app/src/routes/*.ts", "app/src/handlers/server.ts"],
+  "settings": {
+    "lines": 100,
+    "branches": 100,
+    "functions": 100,
+    "statements": 100
+  }
+}
