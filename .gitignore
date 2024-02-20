@@ -131,3 +131,5 @@ dist
 
 pnpm-lock.*
 .pnpm-store/
+
+local
