@@ -9,10 +9,16 @@ export class Api {
     this.caller = axios.create(config);
   }
 
-  async get<T>(path: string = '', query_parameters: Record<string, unknown> = {}): Promise<T> {
+  async get<Response>(path: string = '', query_parameters: Record<string, unknown> = {}): Promise<Response> {
     if (!isEmpty(query_parameters)) path += `?${qs.stringify(query_parameters)}`;
 
-    const response = await this.caller.get<T>(path);
+    const response = await this.caller.get<Response>(path);
+
+    return response.data;
+  }
+
+  async post<Response>(path: string, data: unknown): Promise<Response> {
+    const response = await this.caller.post<Response>(path, data);
 
     return response.data;
   }
