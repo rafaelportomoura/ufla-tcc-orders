@@ -1,5 +1,5 @@
 import { FastifyBaseLogger } from 'fastify';
-import { EVENT_NOTIFICATION, EVENT_STATUS, EVENT_TYPE } from '../constants/event';
+import { EVENT_STATUS, EVENT_TYPE } from '../constants/event';
 import { OrderRepository } from '../repositories/order';
 import { EventBus } from '../services/EventBus';
 import { ProductsService } from '../services/Products';
@@ -45,11 +45,7 @@ export class CreateOrderBusiness {
 
     const order = await this.order_repository.create({ user_id: raw_order.user_id, products, price_total });
 
-    const message_attributes = this.event_bus.messageAttributes(
-      EVENT_TYPE.CREATE,
-      EVENT_STATUS.SUCCESS,
-      EVENT_NOTIFICATION.EMAIL
-    );
+    const message_attributes = this.event_bus.messageAttributes(EVENT_TYPE.CREATE, EVENT_STATUS.SUCCESS);
     await this.event_bus.pub(order, message_attributes);
 
     return order;

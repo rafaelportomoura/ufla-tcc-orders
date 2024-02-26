@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginOptions, FastifyRegisterOptions } from 'f
 import { approve } from '../controllers/approve';
 import { create } from '../controllers/create';
 import { list } from '../controllers/list';
+import { listByUser } from '../controllers/listByUser';
 import { reject } from '../controllers/reject';
 
 export function router(server: FastifyInstance, _: FastifyRegisterOptions<FastifyPluginOptions>, done: () => void) {
@@ -9,5 +10,6 @@ export function router(server: FastifyInstance, _: FastifyRegisterOptions<Fastif
   server.post('/reject', reject);
   server.post('/approve', approve);
   server.get('/', list);
+  server.get('/users/:user_id', listByUser);
   done();
 }

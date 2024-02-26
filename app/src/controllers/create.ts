@@ -6,7 +6,7 @@ import { CODE_MESSAGES } from '../constants/codeMessages';
 import { CONFIGURATION } from '../constants/configuration';
 import { HTTP_STATUS_CODE } from '../constants/httpStatus';
 import { create_order_body_schema } from '../schemas/create';
-import { header_schema } from '../schemas/header';
+import { user_id_schema } from '../schemas/user_id';
 import { CreateOrderResponse, OrderInResponse } from '../types/CreateOrder';
 import { Order } from '../types/Order';
 
@@ -35,7 +35,7 @@ export async function create(req: FastifyRequest, res: FastifyReply): Promise<Cr
     stock_base_url: CONFIGURATION.STOCK_URL,
     products_base_url: CONFIGURATION.PRODUCT_URL
   });
-  const { user_id } = await Validator.validate(req.headers, header_schema);
+  const { user_id } = await Validator.validate(req.headers, user_id_schema);
   const body = await Validator.validate(req.body, create_order_body_schema);
   const order = await business.create({ ...body, user_id });
 

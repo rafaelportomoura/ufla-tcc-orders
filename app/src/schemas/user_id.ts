@@ -1,5 +1,5 @@
 import { z } from 'zod';
 
-export const header_schema = z.object({
+export const user_id_schema = z.object({
   user_id: z.string()
 });

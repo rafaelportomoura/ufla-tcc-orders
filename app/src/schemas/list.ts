@@ -5,8 +5,8 @@ import { pagination_schema, project_schema, search_attribute_schema, sort_schema
 
 export const common_search_schema = z.object({
   status: search_attribute_schema(z.enum(STATUS), ...STRING_OPERATORS).optional(),
-  products: search_attribute_schema(z.string(), ...OBJECT_OPERATORS),
-  price_total: search_attribute_schema(z.number(), ...NUMBER_OPERATORS).optional()
+  products: search_attribute_schema(z.string(), ...OBJECT_OPERATORS).optional(),
+  price_total: search_attribute_schema(z.coerce.number(), ...NUMBER_OPERATORS).optional()
 });
 
 export const list_orders_search_schema = common_search_schema.merge(

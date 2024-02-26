@@ -2,7 +2,7 @@ import { FastifyBaseLogger } from 'fastify';
 import { ObjectId } from 'mongoose';
 import { z } from 'zod';
 import { create_order_body_schema } from '../schemas/create';
-import { header_schema } from '../schemas/header';
+import { user_id_schema } from '../schemas/user_id';
 import { AwsParams } from './Aws';
 import { CodeMessage } from './CodeMessage';
 import { Product } from './Products';
@@ -15,7 +15,7 @@ export type CreateOrderArgs = {
   event_bus_topic: string;
 };
 
-export type CreateOrder = z.infer<typeof create_order_body_schema> & z.infer<typeof header_schema>;
+export type CreateOrder = z.infer<typeof create_order_body_schema> & z.infer<typeof user_id_schema>;
 export type CreateOrderProducts = CreateOrder['products'];
 
 export type OrderInResponse = {
