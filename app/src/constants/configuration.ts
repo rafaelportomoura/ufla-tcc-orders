@@ -8,10 +8,12 @@ export const CONFIGURATION = {
   STAGE: set_string_env('STAGE', 'development'),
   TENANT: set_string_env('TENANT', 'tcc'),
   REGION: set_string_env('REGION', 'us-east-2'),
-  MICROSERVICE: set_string_env('MICROSERVICE', ''),
+  MICROSERVICE: set_string_env('MICROSERVICE', 'orders'),
   LOG_LEVEL: set_env<LoggerLevel>('LOG_LEVEL', 'trace'),
-  PORT: set_number_env('PORT', 3000),
+  PORT: set_number_env('PORT', 5000),
   EVENT_BUS: set_string_env('EVENT_BUS', ''),
   DOCUMENT_SECRET: set_string_env('DOCUMENT_SECRET', ''),
-  DOCUMENT_PARAMS: set_string_env('DOCUMENT_PARAMS', '')
+  DOCUMENT_PARAMS: set_string_env('DOCUMENT_PARAMS', ''),
+  STOCK_URL: set_string_env('STOCK_URL', 'http://localhost:4000/v1'),
+  PRODUCT_URL: set_string_env('PRODUCT_URL', 'http://localhost:3000/v1')
 } as const;

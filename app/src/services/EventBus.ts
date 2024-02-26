@@ -3,7 +3,7 @@ import { aws_config } from '../aws/config';
 import { SNS } from '../aws/sns';
 import { EVENT } from '../constants/event';
 import { AwsParams } from '../types/Aws';
-import { EventBusMessageAttributes, EventNotification, EventStatus, EventType } from '../types/EventBus';
+import { EventBusMessageAttributes, EventStatus, EventType } from '../types/EventBus';
 
 export class EventBus {
   private sns: SNS;
@@ -28,13 +28,12 @@ export class EventBus {
     this.logger.debug('EventBus.publish ->', response);
   }
 
-  messageAttributes(type: EventType, status: EventStatus, notification?: EventNotification): EventBusMessageAttributes {
+  messageAttributes(type: EventType, status: EventStatus): EventBusMessageAttributes {
     const attribute_value = (v: string) => ({ DataType: 'String', StringValue: v });
     return {
       event: attribute_value(EVENT),
       type: attribute_value(type),
-      status: attribute_value(status),
-      ...(notification && { notification: attribute_value(notification) })
+      status: attribute_value(status)
     };
   }
 }

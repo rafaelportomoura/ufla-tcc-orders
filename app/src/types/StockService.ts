@@ -1,5 +1,6 @@
 import { FastifyBaseLogger } from 'fastify';
 import { CodeMessage } from './CodeMessage';
+import { CreateOrderProducts } from './CreateOrder';
 
 export type StockServiceConstructor = {
   base_url: string;
@@ -7,7 +8,7 @@ export type StockServiceConstructor = {
 };
 
 export type ReserveRequest = {
-  products: Record<string, number>;
+  products: CreateOrderProducts;
 };
 
 export type Reserve = {
@@ -17,5 +18,5 @@ export type Reserve = {
 };
 
 export type ReserveResponse = CodeMessage & {
-  reserved: Reserve[];
+  reserves: Reserve[];
 };

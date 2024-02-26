@@ -15,11 +15,11 @@ export class StockService {
     this.logger = logger;
   }
 
-  async reserve(products: ReserveRequest['products']): Promise<Reserve[]> {
+  async reserve({ products }: ReserveRequest): Promise<Reserve[]> {
     try {
-      const response = await this.api.post<ReserveResponse>('/reserve', { products });
-
-      return response.reserved;
+      const response = await this.api.post<ReserveResponse>('reserve', { products });
+      this.logger.info({ products, reserves: response.reserves }, 'StockService.reserve');
+      return response.reserves;
     } catch (error) {
       this.logger.error(error, 'StockService.reserve');
       if (error.response.data.product_ids) {

@@ -1,8 +1,9 @@
 import { FastifyBaseLogger } from 'fastify';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 import { DocumentDatabase } from '../database/document';
+import { order_model } from '../entities/order';
 import { AwsParams } from '../types/Aws';
-import { Order, RawOrder } from '../types/Order';
+import { Order, OrderStatus, RawOrder } from '../types/Order';
 
 export class OrderRepository {
   private model: Model<Order>;
@@ -11,6 +12,7 @@ export class OrderRepository {
 
   constructor(aws: AwsParams, logger: FastifyBaseLogger) {
     this.document_database = new DocumentDatabase(aws, logger);
+    this.model = order_model();
   }
 
   async connect() {
@@ -24,6 +26,7 @@ export class OrderRepository {
   async create(payload: RawOrder): Promise<Order> {
     await this.connect();
     const order = await this.model.create(payload);
+
     return order.toObject();
   }
 
@@ -32,6 +35,12 @@ export class OrderRepository {
     const response = await this.model.countDocuments(query);
 
     return response;
+  }
+
+  async changeStatus(_id: string, status: OrderStatus): Promise<Order | null> {
+    await this.connect();
+    const order = await this.model.findOneAndUpdate({ _id }, { status }, { new: true, lean: true });
+    return order;
   }
 
   async find(

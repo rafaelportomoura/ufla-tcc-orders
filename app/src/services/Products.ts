@@ -1,9 +1,17 @@
 import { FastifyBaseLogger } from 'fastify';
 import { Api } from '../adapters/api';
 import { CODE_MESSAGES } from '../constants/codeMessages';
+import { OPERATOR } from '../constants/search';
 import { InternalServerError } from '../exceptions/InternalServerError';
 import { ProductsNotFound } from '../exceptions/ProductNotFound';
-import { GetProductPrice, GetProductsPrice, Product, ProductList, ProductServiceConstructor } from '../types/Products';
+import {
+  GetProductPrice,
+  GetProductsPrice,
+  ListProductsQuery,
+  Product,
+  ProductList,
+  ProductServiceConstructor
+} from '../types/Products';
 
 export class ProductsService {
   private api: Api;
@@ -17,15 +25,18 @@ export class ProductsService {
 
   async getProductsPrice(product_ids: Array<Product['_id']>): Promise<GetProductsPrice> {
     const { products } = await this.list<GetProductPrice>({
-      price: 1,
-      search: { _id: { in: product_ids } }
+      project: { price: 1, _id: 1 },
+      search: { _id: { [OPERATOR.IN]: product_ids } },
+      page: 1,
+      size: product_ids.length
     });
+    this.logger.info({ product_ids, products }, 'ProductsService.getProductsPrice');
     if (products.length < product_ids.length)
-      throw new ProductsNotFound(products.filter(({ _id }) => !product_ids.includes(_id)).map(({ _id }) => _id));
+      throw new ProductsNotFound(product_ids.filter((id) => products.every(({ _id }) => _id !== id)));
     return products;
   }
 
-  async list<T>(query: Record<string, unknown>): Promise<ProductList<T>> {
+  async list<T>(query: ListProductsQuery): Promise<ProductList<T>> {
     try {
       const response = await this.api.get<ProductList<T>>('', query);
 

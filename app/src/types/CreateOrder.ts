@@ -1,19 +1,36 @@
 import { FastifyBaseLogger } from 'fastify';
+import { ObjectId } from 'mongoose';
+import { z } from 'zod';
+import { create_order_body_schema } from '../schemas/create';
+import { header_schema } from '../schemas/header';
 import { AwsParams } from './Aws';
+import { CodeMessage } from './CodeMessage';
+import { Product } from './Products';
 
 export type CreateOrderArgs = {
   aws_params: AwsParams;
   logger: FastifyBaseLogger;
   stock_base_url: string;
   products_base_url: string;
+  event_bus_topic: string;
 };
 
-export type CreateOrderProducts = {
-  product_id: string;
-  quantity: number;
+export type CreateOrder = z.infer<typeof create_order_body_schema> & z.infer<typeof header_schema>;
+export type CreateOrderProducts = CreateOrder['products'];
+
+export type OrderInResponse = {
+  order_id: ObjectId;
+  price_total: number;
+  price_per_product: Record<
+    Product['_id'],
+    {
+      price_unit: number;
+      quantity: number;
+      price_total: number;
+    }
+  >;
 };
 
-export type CreateOrder = {
-  products: Record<string, number>;
-  user_id: string;
+export type CreateOrderResponse = CodeMessage & {
+  order: OrderInResponse;
 };
