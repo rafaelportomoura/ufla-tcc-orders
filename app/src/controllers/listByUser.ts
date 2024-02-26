@@ -22,6 +22,6 @@ export async function listByUser(req: FastifyRequest, res: FastifyReply): Promis
 
   const response = await business.list(query);
 
-  res.status(HTTP_STATUS_CODE.CREATED);
+  res.status(HTTP_STATUS_CODE.OK);
   return response;
 }

@@ -1,9 +1,9 @@
 import { FastifyBaseLogger } from 'fastify';
 import { z } from 'zod';
-import { approve_schema } from '../schemas/approve';
+import { order_id_schema } from '../schemas/order_id';
 import { AwsParams } from './Aws';
 
-export type Approve = z.infer<typeof approve_schema>;
+export type Approve = z.infer<typeof order_id_schema>;
 
 export type ApproveArgs = {
   aws_params: AwsParams;

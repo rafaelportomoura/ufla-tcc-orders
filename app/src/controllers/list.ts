@@ -16,6 +16,6 @@ export async function list(req: FastifyRequest, res: FastifyReply): Promise<List
 
   const response = await business.list(query);
 
-  res.status(HTTP_STATUS_CODE.CREATED);
+  res.status(HTTP_STATUS_CODE.OK);
   return response;
 }

@@ -5,7 +5,7 @@ import { ApproveBusiness } from '../business/Approve';
 import { CODE_MESSAGES } from '../constants/codeMessages';
 import { CONFIGURATION } from '../constants/configuration';
 import { HTTP_STATUS_CODE } from '../constants/httpStatus';
-import { approve_schema } from '../schemas/approve';
+import { order_id_schema } from '../schemas/order_id';
 import { CodeMessage } from '../types/CodeMessage';
 
 export async function approve(req: FastifyRequest, res: FastifyReply): Promise<CodeMessage> {
@@ -15,7 +15,7 @@ export async function approve(req: FastifyRequest, res: FastifyReply): Promise<C
     event_bus_topic: CONFIGURATION.EVENT_BUS,
     aws_params: aws_params()
   });
-  const body = await Validator.validate(req.body, approve_schema);
+  const body = await Validator.validate(req.body, order_id_schema);
 
   await business.approve(body);
 
