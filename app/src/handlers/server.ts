@@ -1,28 +1,21 @@
-import FastifyCors from '@fastify/cors';
+/* eslint-disable no-console */
 import Fastify from 'fastify';
 import qs from 'fastify-qs';
-
-import { logger_options } from '../adapters/logger';
+import { StatusCodes } from 'http-status-codes';
 import { CONFIGURATION } from '../constants/configuration';
-import { HTTP_STATUS_CODE } from '../constants/httpStatus';
-import { error_middleware } from '../middlewares/error';
 import { router } from '../routes';
 
 async function main() {
   const server = Fastify({
-    logger: logger_options(CONFIGURATION.STAGE, CONFIGURATION.LOG_LEVEL)
+    logger: {
+      level: 'silent'
+    }
   });
   server.register(qs, {});
-  server.register(FastifyCors, {
-    origin: '*',
-    allowedHeaders: '*',
-    methods: '*'
-  });
-  server.setErrorHandler(error_middleware);
 
-  server.get('/health-check', (_, res) => res.status(HTTP_STATUS_CODE.OK).send('alive'));
+  server.get('/health-check', (_, res) => res.status(StatusCodes.OK).send('alive'));
 
-  server.register(router, { prefix: '/v1' });
+  server.register(router);
 
   server.listen(
     {
@@ -31,11 +24,11 @@ async function main() {
     },
     (err, addr) => {
       if (err) {
-        server.log.error(err);
+        console.error(err);
         process.exit(1);
       }
 
-      server.log.info(`RUNNING ON PORT ${addr}`);
+      console.info(`RUNNING ON PORT ${addr}`);
     }
   );
 }

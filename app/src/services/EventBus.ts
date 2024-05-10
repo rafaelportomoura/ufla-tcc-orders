@@ -1,4 +1,4 @@
-import { FastifyBaseLogger } from 'fastify';
+import { Logger } from '../adapters/logger';
 import { aws_config } from '../aws/config';
 import { SNS } from '../aws/sns';
 import { EVENT } from '../constants/event';
@@ -9,7 +9,7 @@ export class EventBus {
   private sns: SNS;
 
   constructor(
-    private logger: FastifyBaseLogger,
+    private logger: Logger,
     private topic: string,
     aws_params: AwsParams
   ) {

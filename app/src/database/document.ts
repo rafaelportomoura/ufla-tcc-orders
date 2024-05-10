@@ -1,15 +1,15 @@
 /* eslint-disable no-empty-function */
-import { FastifyBaseLogger } from 'fastify';
 import { isEmpty } from 'lodash';
 import mongoose from 'mongoose';
 import qs from 'qs';
+import { Logger } from '../adapters/logger';
 import { aws_config } from '../aws/config';
 import { SecretsManager } from '../aws/secretsManager';
 import { SSM } from '../aws/ssm';
 import { CODE_MESSAGES } from '../constants/codeMessages';
 import { CONFIGURATION } from '../constants/configuration';
 import { DatabaseError } from '../exceptions/DatabaseError';
-import { AwsParams } from '../types/Aws';
+import { AwsConfig } from '../types/Aws';
 import { DocumentParams, DocumentSecret } from '../types/DocumentSecret';
 
 export class DocumentDatabase {
@@ -18,8 +18,8 @@ export class DocumentDatabase {
   private ssm: SSM;
 
   constructor(
-    config: AwsParams,
-    private logger: FastifyBaseLogger
+    config: AwsConfig,
+    private logger: Logger
   ) {
     this.secret_manager = new SecretsManager(aws_config(config));
     this.ssm = new SSM(aws_config(config));
@@ -40,19 +40,19 @@ export class DocumentDatabase {
       }
 
       const { password, username } = secrets;
-      const { protocol, host, database, options } = params;
+      const { protocol, host, options } = params;
 
       const query = !isEmpty(options) ? `?${qs.stringify(options)}` : '';
 
-      const uri = `${protocol}://${username}:${password}@${host}${query}`;
-
+      const uri = `${protocol}://${username}:${encodeURIComponent(password)}@${host}${query}`;
       await mongoose.connect(uri, {
-        dbName: database,
+        dbName: CONFIGURATION.MICROSERVICE,
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 360000
       });
+      this.logger.debug('Mongo Connected');
     } catch (error) {
-      this.logger.error(error, 'DatabaseError');
+      this.logger.error('DatabaseError', error.message, error.code);
       throw new DatabaseError(CODE_MESSAGES.CANNOT_ACCESS_DATABASE);
     }
   }

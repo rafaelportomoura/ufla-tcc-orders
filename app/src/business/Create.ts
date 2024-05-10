@@ -1,4 +1,4 @@
-import { FastifyBaseLogger } from 'fastify';
+import { Logger } from '../adapters/logger';
 import { EVENT_STATUS, EVENT_TYPE } from '../constants/event';
 import { OrderRepository } from '../repositories/order';
 import { EventBus } from '../services/EventBus';
@@ -16,7 +16,7 @@ export class CreateOrderBusiness {
 
   private event_bus: EventBus;
 
-  private logger: FastifyBaseLogger;
+  private logger: Logger;
 
   constructor({ aws_params, logger, stock_base_url, products_base_url, event_bus_topic }: CreateOrderArgs) {
     this.order_repository = new OrderRepository(aws_params, logger);

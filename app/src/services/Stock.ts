@@ -1,5 +1,5 @@
-import { FastifyBaseLogger } from 'fastify';
 import { Api } from '../adapters/api';
+import { Logger } from '../adapters/logger';
 import { CODE_MESSAGES } from '../constants/codeMessages';
 import { InternalServerError } from '../exceptions/InternalServerError';
 import { ReserveStockError } from '../exceptions/ReserveStockError';
@@ -8,7 +8,7 @@ import { Reserve, ReserveRequest, ReserveResponse, StockServiceConstructor } fro
 export class StockService {
   private api: Api;
 
-  private logger: FastifyBaseLogger;
+  private logger: Logger;
 
   constructor({ base_url, logger }: StockServiceConstructor) {
     this.api = new Api({ baseURL: base_url });

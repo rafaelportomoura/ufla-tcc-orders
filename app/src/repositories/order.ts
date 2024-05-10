@@ -1,5 +1,6 @@
-import { FastifyBaseLogger } from 'fastify';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
+import { Logger } from '../adapters/logger';
+import { aws_config } from '../aws/config';
 import { DocumentDatabase } from '../database/document';
 import { order_model } from '../entities/order';
 import { AwsParams } from '../types/Aws';
@@ -10,8 +11,8 @@ export class OrderRepository {
 
   private document_database: DocumentDatabase;
 
-  constructor(aws: AwsParams, logger: FastifyBaseLogger) {
-    this.document_database = new DocumentDatabase(aws, logger);
+  constructor(aws: AwsParams, logger: Logger) {
+    this.document_database = new DocumentDatabase(aws_config(aws), logger);
     this.model = order_model();
   }
 

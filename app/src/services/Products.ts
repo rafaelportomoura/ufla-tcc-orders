@@ -1,5 +1,5 @@
-import { FastifyBaseLogger } from 'fastify';
 import { Api } from '../adapters/api';
+import { Logger } from '../adapters/logger';
 import { CODE_MESSAGES } from '../constants/codeMessages';
 import { OPERATOR } from '../constants/search';
 import { InternalServerError } from '../exceptions/InternalServerError';
@@ -16,7 +16,7 @@ import {
 export class ProductsService {
   private api: Api;
 
-  private logger: FastifyBaseLogger;
+  private logger: Logger;
 
   constructor({ base_url, logger }: ProductServiceConstructor) {
     this.logger = logger;

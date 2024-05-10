@@ -1,22 +1,33 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { StatusCodes } from 'http-status-codes';
+import { Logger } from '../adapters/logger';
 import { Validator } from '../adapters/validate';
 import { aws_params } from '../aws/config';
 import { GetOrderBusiness } from '../business/GetOrder';
-import { HTTP_STATUS_CODE } from '../constants/httpStatus';
+import { CONFIGURATION } from '../constants/configuration';
+import { BaseError } from '../exceptions/BaseError';
+import { error_handler } from '../middlewares/error';
 import { get_order_schema } from '../schemas/get_order';
 import { Order } from '../types/Order';
+import { request_id } from '../utils/requestId';
 
-export async function get(req: FastifyRequest, res: FastifyReply): Promise<Order> {
-  const logger = req.log;
-  const business = new GetOrderBusiness({
-    logger,
-    aws_params: aws_params()
-  });
+export async function get(req: FastifyRequest, res: FastifyReply): Promise<Order | BaseError> {
+  const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id(req));
+  try {
+    const business = new GetOrderBusiness({
+      logger,
+      aws_params: aws_params()
+    });
 
-  const params = await Validator.validate(req.params, get_order_schema);
+    const params = await Validator.validate(req.params, get_order_schema);
 
-  const response = await business.get(params);
+    const response = await business.get(params);
 
-  res.status(HTTP_STATUS_CODE.OK);
-  return response;
+    res.status(StatusCodes.OK);
+    return response;
+  } catch (error) {
+    const response = error_handler(logger, error, 'get');
+    res.status(response.status);
+    return response;
+  }
 }

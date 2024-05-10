@@ -1,10 +1,10 @@
-import { FastifyBaseLogger } from 'fastify';
+import { Logger } from '../adapters/logger';
 import { PRODUCT_SORT_BY } from '../constants/search';
 import { Sort, SortBy } from './Search';
 
 export type ProductServiceConstructor = {
   base_url: string;
-  logger: FastifyBaseLogger;
+  logger: Logger;
 };
 
 export type Product = {

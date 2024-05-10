@@ -1,5 +1,5 @@
-import { FastifyBaseLogger } from 'fastify';
 import { z } from 'zod';
+import { Logger } from '../adapters/logger';
 import { list_orders_schema } from '../schemas/list';
 import { AwsParams } from './Aws';
 import { ListResponse, ListType } from './List';
@@ -11,7 +11,7 @@ export type ListOrdersResponse = ListResponse<ListOrders>;
 
 export type ListOrdersArgs = {
   aws_params: AwsParams;
-  logger: FastifyBaseLogger;
+  logger: Logger;
 };
 
 export type ListOrdersQuery = z.infer<typeof list_orders_schema>;

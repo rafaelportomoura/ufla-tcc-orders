@@ -1,10 +1,10 @@
-import { FastifyBaseLogger } from 'fastify';
+import { Logger } from '../adapters/logger';
 import { CodeMessage } from './CodeMessage';
 import { CreateOrderProducts } from './CreateOrder';
 
 export type StockServiceConstructor = {
   base_url: string;
-  logger: FastifyBaseLogger;
+  logger: Logger;
 };
 
 export type ReserveRequest = {

@@ -1,4 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
+Transform:
+  - AWS::LanguageExtensions
 
 Parameters:
     Stage:
@@ -7,16 +9,15 @@ Parameters:
         Type: String
     Microservice:
         Type: String
-    ApiBasePath:
+    LogLevel:
         Type: String
-    VpcId:
-        Type: AWS::EC2::VPC::Id
-        Description: Id of VPC for EC2
-    SubnetIdList:
-        Type: List<AWS::EC2::Subnet::Id>
-        Description: VPC subnets list
-    AuthorizerFunction:
-        Type: String
+        AllowedValues:
+          - error
+          - warn
+          - log
+          - info
+          - verbose
+          - debug
     MinContainers:
         Type: Number
         Description: Min containers to scale to
@@ -33,162 +34,19 @@ Parameters:
         Description: Scaling up policy cool down in seconds
     CPUUtilization:
         Type: String
-        Description: Memory of cpu to uses in autoscaling
-    HasPrivateSubnet:
+        Description: Use of cpu to auto scale
+    TargetGroupArn:
         Type: String
-        AllowedValues:
-          - true
-          - false
-        Default: false
-    Image:
+        Description: Target Group Arn
+    ImageTag: 
         Type: String
-        Description: ECR Image
-    LogLevel:
-        Type: String
-        AllowedValues:
-          - error
-          - warn
-          - log
-          - info
-          - verbose
-          - debug
+        Default: latest
+    
 
 Conditions:
-    IsPrivateSubnet: !Equals [!Ref HasPrivateSubnet, true]
     isProd: !Equals [!Ref Stage, prod]
 
-Resources:
-    # -----------------------------------------------
-    # API 
-    # -----------------------------------------------
-    Integration:
-        Type: AWS::ApiGatewayV2::Integration
-        Properties:
-            ApiId: !Ref Api
-            IntegrationType: HTTP_PROXY
-            IntegrationMethod: ANY
-            IntegrationUri: !If
-              - IsPrivateSubnet
-              - !Ref ListenerHTTPS
-              - !Sub http://${LoadBalancer.DNSName}
-            ConnectionType: !If
-              - IsPrivateSubnet
-              - VPC_LINK
-              - INTERNET
-            ConnectionId: !If
-              - IsPrivateSubnet
-              - Fn::ImportValue: !Sub ${Stage}-${Tenant}-vpc-link-id
-              - !Ref AWS::NoValue
-            PayloadFormatVersion: "1.0"
-            RequestParameters:
-                overwrite:path: '$request.path'
-
-    Route:
-        Type: AWS::ApiGatewayV2::Route
-        Properties:
-            ApiId: !Ref Api
-            RouteKey: $default
-            Target: !Sub integrations/${Integration}
-            AuthorizationType: CUSTOM
-            AuthorizerId: !Ref Authorizer
-
-    RouteOptions:
-        Type: AWS::ApiGatewayV2::Route
-        Properties:
-            ApiId: !Ref Api
-            RouteKey: OPTIONS /{proxy+}
-            Target: !Sub integrations/${Integration}
-            AuthorizationType: NONE
-
-    Api:
-        Type: AWS::ApiGatewayV2::Api
-        Properties:
-            Name: !Sub ${Stage}-${Tenant}-${Microservice}-api
-            ProtocolType: HTTP
-            CorsConfiguration:
-                AllowCredentials: false
-                AllowHeaders:
-                  - '*'
-                AllowMethods:
-                  - '*'
-                AllowOrigins:
-                  - '*'
-                ExposeHeaders:
-                  - '*'
-                MaxAge: 0
-            Tags:
-                Service: ApiGatewayV2
-                Resource: Api
-                Name: !Sub ${Stage}-${Tenant}-${Microservice}-api
-                StackName: !Ref AWS::StackName
-                StackId: !Ref AWS::StackId
-                Region: !Ref AWS::Region
-                Microservice: !Ref Microservice
-                Stage: !Ref Stage
-                Tenant: !Ref Tenant
-
-    ApiMapping:
-        Type: AWS::ApiGatewayV2::ApiMapping
-        Properties:
-            ApiId: !Ref Api
-            ApiMappingKey: !Ref ApiBasePath
-            DomainName:
-                Fn::ImportValue: !Sub ${Stage}-${Tenant}-api-gateway-domain-name
-            Stage: !Ref ApiStage
-
-    ApiDeployment:
-        DependsOn: Route
-        Type: AWS::ApiGatewayV2::Deployment
-        Properties:
-            ApiId: !Ref Api
-
-    ApiStage:
-        Type: AWS::ApiGatewayV2::Stage
-        Properties:
-            ApiId: !Ref Api
-            DeploymentId: !Ref ApiDeployment
-            StageName: !Ref Stage
-            Tags:
-              - Key: Service
-                Value: ApiGatewayV2
-              - Key: Resource
-                Value: Stage
-              - Key: Name
-                Value: !Sub ${Stage}-${Tenant}-${Microservice}-api-stage
-              - Key: StackName
-                Value: !Ref AWS::StackName
-              - Key: StackId
-                Value: !Ref AWS::StackId
-              - Key: Region
-                Value: !Ref AWS::Region
-              - Key: Microservice
-                Value: !Ref Microservice
-              - Key: Stage
-                Value: !Ref Stage
-              - Key: Tenant
-                Value: !Ref Tenant
-
-    Authorizer:
-        Type: AWS::ApiGatewayV2::Authorizer
-        Properties:
-            Name: LambdaAuthorizer
-            ApiId: !Ref Api
-            AuthorizerType: REQUEST
-            AuthorizerUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${AuthorizerFunction}/invocations
-            AuthorizerPayloadFormatVersion: '2.0'
-            AuthorizerResultTtlInSeconds: 0
-            IdentitySource:
-              - $request.header.Authorization
-
-
-    LambdaPermission:
-        Type: AWS::Lambda::Permission
-        Properties:
-            Action: lambda:InvokeFunction
-            FunctionName: authorizer
-            Principal: apigateway.amazonaws.com
-            SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/authorizers/${Authorizer}
-
+Resources:                        
     # -----------------------------------------------
     # Cluster
     # -----------------------------------------------
@@ -203,115 +61,6 @@ Resources:
                 Value: Cluster
               - Key: Name
                 Value: !Sub ${Stage}-${Tenant}-${Microservice}-cluster
-              - Key: StackName
-                Value: !Ref AWS::StackName
-              - Key: StackId
-                Value: !Ref AWS::StackId
-              - Key: Region
-                Value: !Ref AWS::Region
-              - Key: Microservice
-                Value: !Ref Microservice
-              - Key: Stage
-                Value: !Ref Stage
-              - Key: Tenant
-                Value: !Ref Tenant
-
-    # ---------------------------------------------
-    # LOAD BALANCER
-    # ---------------------------------------------
-    LoadBalancer:
-        Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-        Properties:
-            Name: !Sub ${Stage}-${Tenant}-${Microservice}-alb
-            LoadBalancerAttributes:
-              - Key: idle_timeout.timeout_seconds
-                Value: '60'
-            Scheme: !If
-              - IsPrivateSubnet
-              - internal
-              - internet-facing
-            SecurityGroups:
-              - !Ref LBSecurityGroup
-            Subnets: !Ref SubnetIdList
-            Tags:
-              - Key: Service
-                Value: ElasticLoadBalancingV2
-              - Key: Resource
-                Value: LoadBalancer
-              - Key: Name
-                Value: !Sub ${Stage}-${Tenant}-${Microservice}-alb
-              - Key: StackName
-                Value: !Ref AWS::StackName
-              - Key: StackId
-                Value: !Ref AWS::StackId
-              - Key: Region
-                Value: !Ref AWS::Region
-              - Key: Microservice
-                Value: !Ref Microservice
-              - Key: Stage
-                Value: !Ref Stage
-              - Key: Tenant
-                Value: !Ref Tenant
-
-    LBSecurityGroup:
-        Type: AWS::EC2::SecurityGroup
-        Properties:
-            GroupDescription: Allow http to client host
-            VpcId: !Ref VpcId
-            SecurityGroupIngress:
-              - IpProtocol: tcp
-                FromPort: 80
-                ToPort: 80
-                CidrIp: 0.0.0.0/0
-            Tags:
-              - Key: Service
-                Value: VPC
-              - Key: Resource
-                Value: SecurityGroup
-              - Key: Name
-                Value: !Sub ${Stage}-${Tenant}-${Microservice}-alb-sg
-              - Key: StackName
-                Value: !Ref AWS::StackName
-              - Key: StackId
-                Value: !Ref AWS::StackId
-              - Key: Region
-                Value: !Ref AWS::Region
-              - Key: Microservice
-                Value: !Ref Microservice
-              - Key: Stage
-                Value: !Ref Stage
-              - Key: Tenant
-                Value: !Ref Tenant
-
-    ListenerHTTPS:
-        Type: AWS::ElasticLoadBalancingV2::Listener
-        Properties:
-            DefaultActions:
-              - TargetGroupArn: !Ref TargetGroup
-                Type: forward
-            LoadBalancerArn: !Ref LoadBalancer
-            Port: 80
-            Protocol: HTTP
-
-    TargetGroup:
-        Type: AWS::ElasticLoadBalancingV2::TargetGroup
-        Properties:
-            Name: !Sub ${Stage}-${Tenant}-${Microservice}-alb-tg
-            HealthCheckPath: "/health-check"
-            Port: 80
-            Protocol: HTTP
-            TargetGroupAttributes:
-              - Key: deregistration_delay.timeout_seconds
-                Value: '60' # default is 300
-            TargetType: ip
-            VpcId: !Ref VpcId
-            Tags:
-              - Key: Service
-                Value: ElasticLoadBalancingV2
-              - Key: Resource
-                Value: TargetGroup
-              - Key: Name
-                Value: !Sub ${Stage}-${Tenant}-${Microservice}-alb-tg
               - Key: StackName
                 Value: !Ref AWS::StackName
               - Key: StackId
@@ -349,6 +98,10 @@ Resources:
                           - secretsmanager:GetSecretValue
                           - sqs:ReceiveMessage
                           - sqs:SendMessage
+                          - s3:GetObject
+                          - s3:PutObject
+                          - s3:DeleteObject
+                          - sns:Publish
                         Resource: "*"
             Tags:
               - Key: Service
@@ -445,6 +198,7 @@ Resources:
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
+            Family: !Sub ${Stage}-${Tenant}-${Microservice}
             ContainerDefinitions:
               - Name: !Sub ${Stage}-${Tenant}-${Microservice}-http
                 PortMappings:
@@ -458,17 +212,22 @@ Resources:
                     Value: !Ref AWS::Region
                   - Name: TENANT
                     Value: !Ref Tenant
+                  - Name: PORT
+                    Value: 80
                   - Name: LOG_LEVEL
                     Value: !Ref LogLevel
                   - Name: MICROSERVICE
                     Value: !Ref Microservice
                   - Name: DOCUMENT_SECRET
-                    Value:
-                        Fn::ImportValue: !Sub ${Stage}-${Tenant}-${Microservice}-document-db-secret
+                    Value: !Sub ${Stage}-${Tenant}-document-db
                   - Name: DOCUMENT_PARAMS
-                    Value:
-                        Fn::ImportValue: !Sub ${Stage}-${Tenant}-${Microservice}-document-db-parameter
-                Image: !Ref Image
+                    Value: !Sub ${Stage}-${Tenant}-document-db
+                  - Name: EVENT_BUS
+                    Value: { "Fn::ImportValue": !Sub "${Stage}-${Tenant}-event-bus" }
+                Image: !Sub 
+                  - "${uri}:${tag}"
+                  - uri: {"Fn::ImportValue": !Sub "${Stage}-${Tenant}-${Microservice}-ecr-repository-uri"}
+                    tag: !Ref ImageTag
                 LogConfiguration:
                     LogDriver: awslogs
                     Options:
@@ -476,6 +235,21 @@ Resources:
                         awslogs-stream-prefix: !Sub ${Stage}-${Tenant}-${Microservice}-http
                         awslogs-region: !Ref AWS::Region
                 Essential: true
+              - Name: envoy
+                Image: public.ecr.aws/appmesh/aws-appmesh-envoy:v1.15.1.0-prod
+                Essential: true
+                Environment:
+                  - Name: APPMESH_VIRTUAL_NODE_NAME
+                    Value: !Sub
+                      - "mesh/${AppMeshName}/virtualNode/${VirtualNodeName}"
+                      - AppMeshName: {'Fn::ImportValue': !Sub '${Stage}-${Tenant}-app-mesh-name'}
+                        VirtualNodeName: !Ref Microservice
+                  - Name: AWS_REGION
+                    Value: !Ref AWS::Region
+                User: 1337
+                PortMappings:
+                  - ContainerPort: 9901
+                    Protocol: tcp
             Cpu: 256
             Memory: 512
             ExecutionRoleArn: !GetAtt ExecutionRole.Arn
@@ -503,57 +277,28 @@ Resources:
               - Key: Tenant
                 Value: !Ref Tenant
 
-    ServiceSecurityGroup:
-        Type: AWS::EC2::SecurityGroup
-        Properties:
-            GroupDescription: Allow http from load balancer
-            VpcId: !Ref VpcId
-            SecurityGroupIngress:
-              - IpProtocol: tcp
-                FromPort: 80
-                ToPort: 80
-                SourceSecurityGroupId: !Ref LBSecurityGroup
-            Tags:
-              - Key: Service
-                Value: VPC
-              - Key: Resource
-                Value: SecurityGroup
-              - Key: Name
-                Value: !Sub ${Stage}-${Tenant}-${Microservice}-service-sg
-              - Key: StackName
-                Value: !Ref AWS::StackName
-              - Key: StackId
-                Value: !Ref AWS::StackId
-              - Key: Region
-                Value: !Ref AWS::Region
-              - Key: Microservice
-                Value: !Ref Microservice
-              - Key: Stage
-                Value: !Ref Stage
-              - Key: Tenant
-                Value: !Ref Tenant
 
     Service:
         Type: AWS::ECS::Service
-        DependsOn: ListenerHTTPS
         Properties:
             Cluster: !Ref Cluster
+            ServiceName: !Sub ${Stage}-${Tenant}-${Microservice}-http
             DesiredCount: !Ref MinContainers
             LaunchType: FARGATE
             TaskDefinition: !Ref TaskDefinition
             LoadBalancers:
-              - ContainerName: task
+              - ContainerName: !Sub ${Stage}-${Tenant}-${Microservice}-http
                 ContainerPort: 80
-                TargetGroupArn: !Ref TargetGroup
+                TargetGroupArn: !Ref TargetGroupArn
+            ServiceRegistries:
+              - ContainerName: !Sub ${Stage}-${Tenant}-${Microservice}-http
+                RegistryArn: {'Fn::ImportValue': !Sub "${Stage}-${Tenant}-${Microservice}-cloud-map-service-arn"}
             NetworkConfiguration:
                 AwsvpcConfiguration:
-                    AssignPublicIp: !If
-                      - IsPrivateSubnet
-                      - DISABLED
-                      - ENABLED
+                    AssignPublicIp: DISABLED
                     SecurityGroups:
-                      - !Ref ServiceSecurityGroup
-                    Subnets: !Ref SubnetIdList
+                      - Fn::ImportValue: !Sub "${Stage}-${Tenant}-private-subnet-security-group-id"
+                    Subnets: !Split [',', {'Fn::ImportValue': !Sub "${Stage}-${Tenant}-private-subnets-list"}]
             Tags:
               - Key: Service
                 Value: ECS

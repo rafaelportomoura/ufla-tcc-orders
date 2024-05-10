@@ -31,7 +31,7 @@
       "TSTypeAliasDeclaration",
       "BinaryExpression"
     ],
-    "snakecasejs/whitelist": ["statusCode", "PromiseResult", "parseSnakeCaseFromJson"],
+    "snakecasejs/whitelist": ["StatusCodes", "PromiseResult", "parseSnakeCaseFromJson"],
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]
     },

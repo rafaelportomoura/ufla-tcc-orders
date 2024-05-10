@@ -1,24 +1,34 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { StatusCodes } from 'http-status-codes';
+import { Logger } from '../adapters/logger';
 import { Validator } from '../adapters/validate';
 import { aws_params } from '../aws/config';
 import { RejectBusiness } from '../business/Reject';
 import { CODE_MESSAGES } from '../constants/codeMessages';
 import { CONFIGURATION } from '../constants/configuration';
-import { HTTP_STATUS_CODE } from '../constants/httpStatus';
+import { BaseError } from '../exceptions/BaseError';
+import { error_handler } from '../middlewares/error';
 import { order_id_schema } from '../schemas/order_id';
 import { CodeMessage } from '../types/CodeMessage';
+import { request_id } from '../utils/requestId';
 
-export async function reject(req: FastifyRequest, res: FastifyReply): Promise<CodeMessage> {
-  const logger = req.log;
-  const business = new RejectBusiness({
-    logger,
-    event_bus_topic: CONFIGURATION.EVENT_BUS,
-    aws_params: aws_params()
-  });
-  const body = await Validator.validate(req.body, order_id_schema);
+export async function reject(req: FastifyRequest, res: FastifyReply): Promise<CodeMessage | BaseError> {
+  const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id(req));
+  try {
+    const business = new RejectBusiness({
+      logger,
+      event_bus_topic: CONFIGURATION.EVENT_BUS,
+      aws_params: aws_params()
+    });
+    const body = await Validator.validate(req.body, order_id_schema);
 
-  await business.reject(body);
+    await business.reject(body);
 
-  res.status(HTTP_STATUS_CODE.OK);
-  return CODE_MESSAGES.REJECTED;
+    res.status(StatusCodes.OK);
+    return CODE_MESSAGES.REJECTED;
+  } catch (error) {
+    const response = error_handler(logger, error, 'reject');
+    res.status(response.status);
+    return response;
+  }
 }

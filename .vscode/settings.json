@@ -88,8 +88,8 @@
 
   "[json]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": false,
-      "source.fixAll": false
+      "source.organizeImports": "never",
+      "source.fixAll": "never"
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -118,8 +118,8 @@
     "editor.insertSpaces": true,
     "editor.autoIndent": "advanced",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": false,
-      "source.fixAll": false
+      "source.organizeImports": "never",
+      "source.fixAll": "never"
     },
     "editor.defaultFormatter": "kennylong.kubernetes-yaml-formatter",
     "editor.formatOnSave": true,
@@ -132,21 +132,10 @@
     "editor.detectIndentation": true,
     "editor.indentSize": "tabSize"
   },
-
-  "material-icon-theme.folders.associations": {
-    "business": "Core",
-    "services": "Job",
-    "handlers": "Public",
-    "adapters": "Shared",
-    "exceptions": "Error"
-  },
-
   "[json][yaml]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": "never",
       "source.fixAll": "never"
     }
   },
-
-  "workbench.iconTheme": "material-icon-theme"
 }

@@ -2,9 +2,11 @@ import { CODE_MESSAGES } from '../constants/codeMessages';
 import { BadRequestError } from './BadRequestError';
 
 export class ValidationError<T> extends BadRequestError {
-  constructor(private issues: T) {
+  public issues: T;
+  constructor(issues: T) {
     super(CODE_MESSAGES.VALIDATION_ERROR);
     this.name = 'ValidationError';
+    this.issues = issues;
   }
 
   toJSON() {

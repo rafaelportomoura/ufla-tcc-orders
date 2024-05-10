@@ -1,20 +1,57 @@
-import { PinoLoggerOptions } from 'fastify/types/logger';
-import { LoggerLevel } from '../types/Logger';
+/* eslint-disable no-console */
+import { LoggerLevel, LoggerLevelTier } from '../constants/loggerLevel';
 
-const local_logger_options = (level: LoggerLevel): PinoLoggerOptions => ({
-  level,
-  transport: {
-    target: 'pino-pretty'
+export class Logger {
+  level: LoggerLevel;
+
+  constructor(
+    level: LoggerLevel,
+    private id: unknown
+  ) {
+    this.level = level;
   }
-});
 
-const aws_logger_options = (level: LoggerLevel): PinoLoggerOptions => ({ level });
+  debug(...args: unknown[]) {
+    if (!LoggerLevelTier.debug.includes(this.level)) return;
+    console.log('🔎 DEBUG', ...this.parser(...args));
+  }
 
-const test_logger_options = () => false;
+  verbose(...args: unknown[]) {
+    if (!LoggerLevelTier.verbose.includes(this.level)) return;
+    console.log('🗣 VERBOSE', ...this.parser(...args));
+  }
 
-export const logger_options = (stage: string, level: LoggerLevel) =>
-  ({
-    [stage]: aws_logger_options(level),
-    development: local_logger_options(level),
-    test: test_logger_options()
-  })[stage];
+  warn(...args: unknown[]) {
+    if (!LoggerLevelTier.warn.includes(this.level)) return;
+    console.log('⚠ WARN', ...this.parser(...args));
+  }
+
+  info(...args: unknown[]) {
+    if (!LoggerLevelTier.info.includes(this.level)) return;
+    console.log('🔈 INFO', ...this.parser(...args));
+  }
+
+  log(...args: unknown[]) {
+    if (!LoggerLevelTier.log.includes(this.level)) return;
+    console.log(...this.parser(...args));
+  }
+
+  error(...args: unknown[]) {
+    if (!LoggerLevelTier.error.includes(this.level)) return;
+    console.log('❌ ERROR', ...this.parser(...args));
+  }
+
+  parser(...args: unknown[]) {
+    return [`[${this.id}]`, ...args.map((arg) => this.stringify(arg))];
+  }
+
+  stringify(arg: unknown) {
+    if (typeof arg === 'string') return arg;
+
+    try {
+      return JSON.stringify(arg);
+    } catch {
+      return arg?.toString();
+    }
+  }
+}
