@@ -13,6 +13,10 @@ export const CODE_MESSAGES = {
     code: prefix(n++),
     message: 'Cannot access database!'
   },
+  UNAUTHORIZED: {
+    code: prefix(n++),
+    message: 'Unauthorized!'
+  },
   VALIDATION_ERROR: {
     code: prefix(n++),
     message: 'Validation Error!'

@@ -1,9 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { APIGatewayRequestAuthorizerEvent, APIGatewayTokenAuthorizerEvent, Callback, Context } from 'aws-lambda';
 import { log } from 'console';
+import { Authorizer } from '../business/authorizer';
 import { CONFIGURATION } from '../constants/configuration';
 import { URLS } from '../constants/urls';
-import { ForbiddenError } from '../exceptions/ForbiddenError';
 import { UnauthorizedError } from '../exceptions/Unauthorized';
 import { OAuthService } from '../services/OAuth';
 import { GenerateAuthResponse } from '../utils/generateAuthResponse';
@@ -25,7 +25,9 @@ export async function authorizer(
 
     const { decoded_token, group } = await authorizer_business.validateToken(token);
 
-    if (group !== 'admin') throw new ForbiddenError(decoded_token);
+    if (group !== 'admin') {
+      Authorizer.validate(methodArn, decoded_token);
+    }
 
     const authorizer_response = GenerateAuthResponse.success(decoded_token, methodArn);
 
