@@ -133,3 +133,4 @@ pnpm-lock.*
 .pnpm-store/
 
 local
+deploy/scripts
