@@ -20,11 +20,10 @@ describe('Controller -> List', async () => {
     res = fastify_stub();
     sinon.stub(console, 'log');
   });
-  it.only('should list', async () => {
+  it('should list', async () => {
     const order = OrderData.listResponse();
     business.resolves(order);
     const response = await controller(SearchData.filter());
-    console.info(response);
     expect(res.status.args).deep.equal([[200]]);
     expect(response).deep.equal(order);
   });
