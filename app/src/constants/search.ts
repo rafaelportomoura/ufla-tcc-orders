@@ -75,7 +75,7 @@ export const ORDER_SORT_BY = ['created_at', 'updated_at', 'user_id'];
 
 export const SORT_KEY = {
   ASC: 'asc',
-  DESC: 'dec'
+  DESC: 'desc'
 } as const;
 
 export const SORT = {

@@ -68,7 +68,8 @@ export class SearchData {
       user_id: 1,
       status: 1,
       created_at: 1,
-      updated_at: 1
+      updated_at: 1,
+      ...d
     };
   }
 
