@@ -1,7 +1,6 @@
 import { pick } from 'lodash';
 import { Writeable, ZodEnum, ZodNumber, ZodOptional, ZodPipeline, ZodTypeAny, util, z } from 'zod';
-import { OPERATORS_MAP_TO_SCHEMA, SORT_KEY, SORT_KEYS } from '../constants/search';
-import { Operator } from '../types/Search';
+import { OPERATORS, OPERATORS_MAP_TO_SCHEMA, SORT_KEY, SORT_KEYS } from '../constants/search';
 
 export const project_schema = <T extends [string, ...string[]]>(...keys: T) => {
   const obj = {} as Record<T[number], ZodOptional<ZodPipeline<ZodEnum<['0', '1']>, ZodNumber>>>;
@@ -18,7 +17,10 @@ export const project_schema = <T extends [string, ...string[]]>(...keys: T) => {
     }, 'Cannot do inclusion and exclusion projection');
 };
 
-export const search_attribute_schema = <T extends ZodTypeAny, O extends [Operator, ...Operator[]]>(
+export const search_attribute_schema = <
+  T extends ZodTypeAny,
+  O extends [(typeof OPERATORS)[number], ...(typeof OPERATORS)[number][]]
+>(
   schema: T,
   ...operators: O
 ) => {
