@@ -37,7 +37,11 @@ describe('OrderRepository', () => {
   it('should create an order', async () => {
     const payload: RawOrder = OrderData.raw();
     const order = OrderData.order(payload);
-    create_stub.resolves(order);
+    create_stub.resolves({
+      toObject() {
+        return order;
+      }
+    });
     connect_stub.resolves();
 
     const result = await repository.create(payload);
@@ -99,7 +103,7 @@ describe('OrderRepository', () => {
     const result = await repository.find(query, {}, { lean: true });
 
     expect(result).to.deep.equal(orders);
-    expect(find_stub.calledOnceWith(query, {}, {})).equal(true);
+    expect(find_stub.calledOnceWith(query, {}, { lean: true })).equal(true);
   });
 
   it('should find one order', async () => {
@@ -126,7 +130,7 @@ describe('OrderRepository', () => {
     const result = await repository.findOne(query, {}, { lean: true });
 
     expect(result).to.deep.equal(order);
-    expect(find_one_stub.calledOnceWith(query, {}, {})).equal(true);
+    expect(find_one_stub.calledOnceWith(query, {}, { lean: true })).equal(true);
   });
 
   it('should disconnect', async () => {

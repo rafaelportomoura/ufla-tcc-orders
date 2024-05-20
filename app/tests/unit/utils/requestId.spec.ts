@@ -11,4 +11,8 @@ describe('Utils -> RequestId', () => {
     const response = request_id(fastify_request());
     expect(response.length).equal(24);
   });
+  it('Should create request id', () => {
+    const response = request_id();
+    expect(response.length).equal(24);
+  });
 });
