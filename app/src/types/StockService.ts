@@ -15,7 +15,7 @@ export type ReserveRequest = {
 export type Reserve = {
   stock_ids: number[];
   quantity: number;
-  product_id: number;
+  product_id: string;
 };
 
 export type ReserveResponse = CodeMessage & {

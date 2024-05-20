@@ -15,7 +15,6 @@ export type Product = {
   price: number;
   created_at: Date;
   updated_at: Date;
-  status: string;
   images: Array<string>;
 };
 

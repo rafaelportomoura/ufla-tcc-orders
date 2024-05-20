@@ -9,6 +9,12 @@ export class AuthorizerData {
   static create(): string {
     return AuthorizerData.methodArn('POST', '/');
   }
+  static getByUser(username: string = ':username'): string {
+    return AuthorizerData.methodArn('GET', `/users/${username}`);
+  }
+  static get(order_id: string = ':order_id', username: string = ':username'): string {
+    return AuthorizerData.methodArn('GET', `/${order_id}/users/${username}`);
+  }
   static allArns(): string[] {
     return [AuthorizerData.create()];
   }

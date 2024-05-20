@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { faker } from '@faker-js/faker';
-import { Product } from '../../src/types/Products';
+import { GetProductPrice, Product } from '../../src/types/Products';
 
 export class ProductData {
   static readonly _id = () => faker.database.mongodbObjectId();
@@ -14,6 +14,14 @@ export class ProductData {
       images: [faker.internet.url()],
       created_at: faker.date.recent(),
       updated_at: faker.date.recent(),
+      ...d
+    };
+  }
+
+  static price(d?: Partial<GetProductPrice>): GetProductPrice {
+    return {
+      _id: this._id(),
+      price: faker.number.float({ multipleOf: 0.01 }),
       ...d
     };
   }
