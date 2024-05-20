@@ -3,12 +3,15 @@ import { faker } from '@faker-js/faker';
 import { STATUS, STATUS_MAP } from '../../src/constants/status';
 import { CreateOrder, OrderInResponse } from '../../src/types/CreateOrder';
 import { GetOrder } from '../../src/types/GetOrder';
+import { ListOrdersResponse } from '../../src/types/ListOrder';
 import { Order, OrderProduct, RawOrder } from '../../src/types/Order';
 import { GetProductsPrice } from '../../src/types/Products';
 import { ProductData } from './product';
 
 export class OrderData {
   static readonly _id = () => faker.database.mongodbObjectId();
+
+  static readonly status = () => STATUS[faker.number.int({ min: 0, max: STATUS.length - 1 })];
 
   static create(d?: Partial<CreateOrder>): CreateOrder {
     return {
@@ -66,7 +69,7 @@ export class OrderData {
       _id: this._id(),
       created_at: faker.date.recent(),
       updated_at: faker.date.recent(),
-      status: STATUS[faker.number.int({ min: 0, max: STATUS.length - 1 })],
+      status: this.status(),
       ...d
     };
   }
@@ -93,6 +96,16 @@ export class OrderData {
     return {
       user_id: faker.internet.userName(),
       order_id: this._id(),
+      ...d
+    };
+  }
+
+  static listResponse(d?: Partial<ListOrdersResponse>): ListOrdersResponse {
+    return {
+      page: 1,
+      pages: 1,
+      count: 1,
+      orders: [this.order()],
       ...d
     };
   }

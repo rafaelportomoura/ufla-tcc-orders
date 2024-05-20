@@ -1,11 +1,19 @@
 import { pick } from 'lodash';
-import { Writeable, ZodEnum, ZodNumber, ZodOptional, ZodPipeline, ZodTypeAny, util, z } from 'zod';
+import { Writeable, ZodEnum, ZodNumber, ZodOptional, ZodPipeline, ZodTypeAny, ZodUnion, util, z } from 'zod';
 import { OPERATORS, OPERATORS_MAP_TO_SCHEMA, SORT_KEY, SORT_KEYS } from '../constants/search';
 
 export const project_schema = <T extends [string, ...string[]]>(...keys: T) => {
-  const obj = {} as Record<T[number], ZodOptional<ZodPipeline<ZodEnum<['0', '1']>, ZodNumber>>>;
+  const obj = {} as Record<
+    T[number],
+    ZodOptional<ZodUnion<[ZodOptional<ZodPipeline<ZodEnum<['0', '1']>, ZodNumber>>, ZodNumber]>>
+  >;
   for (const key of keys) {
-    obj[key as T[number]] = z.enum(['0', '1']).pipe(z.coerce.number()).optional();
+    obj[key as T[number]] = z
+      .enum(['0', '1'])
+      .pipe(z.coerce.number())
+      .optional()
+      .or(z.number().min(0).max(1))
+      .optional();
   }
 
   return z
