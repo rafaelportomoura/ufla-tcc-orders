@@ -9,6 +9,7 @@ import { BadRequestError } from '../../../src/exceptions/BadRequestError';
 import { NotFoundError } from '../../../src/exceptions/NotFoundError';
 import { OrderRepository } from '../../../src/repositories/order';
 import { EventBus } from '../../../src/services/EventBus';
+import { OrderData } from '../../data/order';
 
 describe('Business -> Approve', () => {
   let approve_business: ApproveBusiness;
@@ -42,6 +43,15 @@ describe('Business -> Approve', () => {
 
   it('should change order status to APPROVED and publish event', async () => {
     const order = { status: STATUS_MAP.PENDING, products: {} };
+    find_one.resolves(order);
+    change_status.resolves({ ...order, status: STATUS_MAP.APPROVED });
+    await approve_business.approve({ order_id: '1' });
+    sinon.assert.calledWith(change_status, '1', STATUS_MAP.APPROVED);
+    sinon.assert.calledOnce(event_bus);
+  });
+
+  it('should change order status to APPROVED and publish event', async () => {
+    const order = OrderData.order({ status: STATUS_MAP.PENDING });
     find_one.resolves(order);
     change_status.resolves({ ...order, status: STATUS_MAP.APPROVED });
     await approve_business.approve({ order_id: '1' });

@@ -42,7 +42,7 @@ describe('Business -> Create', async () => {
     reserve_stock.resolves(reserve);
     create_order_stub.resolves(order);
     event_bus.resolves();
-    const response = business.create(create);
+    const response = await business.create(create);
     expect(response).deep.equal(order);
     expect(event_bus.calledOnce).equal(true);
     expect(event_bus.args[0][0]).deep.equal(order);
