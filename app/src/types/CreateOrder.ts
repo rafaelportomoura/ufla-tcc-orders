@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongoose';
 import { z } from 'zod';
 import { Logger } from '../adapters/logger';
 import { create_order_body_schema } from '../schemas/create';
@@ -20,7 +19,7 @@ export type CreateOrder = z.infer<typeof create_order_body_schema> & z.infer<typ
 export type CreateOrderProducts = CreateOrder['products'];
 
 export type OrderInResponse = {
-  order_id: ObjectId;
+  order_id: string;
   price_total: number;
   price_per_product: Record<
     Product['_id'],

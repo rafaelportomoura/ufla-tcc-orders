@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { faker } from '@faker-js/faker';
 import { STATUS, STATUS_MAP } from '../../src/constants/status';
-import { CreateOrder } from '../../src/types/CreateOrder';
+import { CreateOrder, OrderInResponse } from '../../src/types/CreateOrder';
 import { Order, OrderProduct, RawOrder } from '../../src/types/Order';
 import { GetProductsPrice } from '../../src/types/Products';
 import { ProductData } from './product';
@@ -67,6 +67,24 @@ export class OrderData {
       updated_at: faker.date.recent(),
       status: STATUS[faker.number.int({ min: 0, max: STATUS.length - 1 })],
       ...d
+    };
+  }
+
+  static orderInResponse(order: Order): OrderInResponse {
+    return {
+      order_id: order._id,
+      price_total: order.price_total,
+      price_per_product: Object.entries(order.products).reduce(
+        (acc, [product_id, { price_unit, quantity, price_total }]) => ({
+          ...acc,
+          [product_id]: {
+            price_unit,
+            quantity,
+            price_total
+          }
+        }),
+        {}
+      )
     };
   }
 }

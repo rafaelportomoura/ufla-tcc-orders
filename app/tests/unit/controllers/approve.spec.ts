@@ -8,7 +8,7 @@ import { InternalServerError } from '../../../src/exceptions/InternalServerError
 import { fastify_reply, fastify_request, fastify_stub } from '../../data/fastify';
 import { OrderData } from '../../data/order';
 
-describe('Controller -> GetProductBalance', async () => {
+describe('Controller -> Approve', async () => {
   let business: sinon.SinonStub;
   let res: Record<keyof FastifyReply, sinon.SinonStub>;
   const controller = (body: Record<string, unknown>) => approve(fastify_request({ body }), fastify_reply(res));
@@ -16,6 +16,7 @@ describe('Controller -> GetProductBalance', async () => {
     sinon.restore();
     business = sinon.stub(ApproveBusiness.prototype, 'approve');
     res = fastify_stub();
+    sinon.stub(console, 'log');
   });
   it('should approve', async () => {
     business.resolves();
@@ -25,7 +26,7 @@ describe('Controller -> GetProductBalance', async () => {
   });
   it('should not approve', async () => {
     business.rejects(new Error());
-    const response = await controller({ order_id: '1' });
+    const response = await controller({ order_id: OrderData._id() });
     expect(res.status.args).deep.equal([[500]]);
     expect(response).deep.equal(new InternalServerError(CODE_MESSAGES.INTERNAL_SERVER_ERROR));
   });
