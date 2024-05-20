@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { faker } from '@faker-js/faker';
-import { ObjectId } from 'mongoose';
 import { STATUS, STATUS_MAP } from '../../src/constants/status';
 import { CreateOrder } from '../../src/types/CreateOrder';
 import { Order, OrderProduct, RawOrder } from '../../src/types/Order';
@@ -8,7 +7,7 @@ import { GetProductsPrice } from '../../src/types/Products';
 import { ProductData } from './product';
 
 export class OrderData {
-  static readonly _id = () => faker.database.mongodbObjectId() as unknown as ObjectId;
+  static readonly _id = () => faker.database.mongodbObjectId();
 
   static create(d?: Partial<CreateOrder>): CreateOrder {
     return {

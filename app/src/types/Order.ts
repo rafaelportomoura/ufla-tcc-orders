@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongoose';
 import { STATUS } from '../constants/status';
 
 export type OrderStatus = (typeof STATUS)[number];
@@ -11,7 +10,7 @@ export type OrderProduct = {
 };
 
 export type Order = {
-  _id: ObjectId;
+  _id: string;
   products: Record<string, OrderProduct>;
   created_at: Date;
   updated_at: Date;
