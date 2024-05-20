@@ -35,7 +35,7 @@ export const CODE_MESSAGES = {
   },
   PRODUCTS_NOT_FOUND: {
     code: prefix(n++),
-    message: 'Products not found!'
+    message: 'Product(s) not found!'
   },
   ERROR_CALLING_LIST_PRODUCT_API: {
     code: prefix(n++),

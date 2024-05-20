@@ -24,13 +24,13 @@ describe('Controller -> ListByUser', async () => {
   it('should list', async () => {
     const order = OrderData.listResponse();
     business.resolves(order);
-    const response = await controller(SearchData.filter(), { user_id: 'x' });
+    const response = await controller(SearchData.filter({ search: undefined }), { user_id: 'x' });
     expect(res.status.args).deep.equal([[200]]);
     expect(response).deep.equal(order);
   });
   it('should not list', async () => {
     business.rejects(new Error());
-    const response = await controller(SearchData.filter(), { user_id: 'x' });
+    const response = await controller(SearchData.filter({ search: undefined }), { user_id: 'x' });
     expect(res.status.args).deep.equal([[500]]);
     expect(response).deep.equal(new InternalServerError(CODE_MESSAGES.INTERNAL_SERVER_ERROR));
   });
