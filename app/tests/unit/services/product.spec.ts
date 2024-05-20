@@ -11,7 +11,7 @@ import { ProductsService } from '../../../src/services/Products';
 import { ListProductsQuery, Product, ProductList } from '../../../src/types/Products';
 import { ProductData } from '../../data/product';
 
-describe('Service -> ProductsService', () => {
+describe('Service -> Products', () => {
   let products_service: ProductsService;
   let get_stub: sinon.SinonStub;
   const base_url = 'http://example.com';
