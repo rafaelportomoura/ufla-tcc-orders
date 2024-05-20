@@ -2,6 +2,7 @@
 import { faker } from '@faker-js/faker';
 import { STATUS, STATUS_MAP } from '../../src/constants/status';
 import { CreateOrder, OrderInResponse } from '../../src/types/CreateOrder';
+import { GetOrder } from '../../src/types/GetOrder';
 import { Order, OrderProduct, RawOrder } from '../../src/types/Order';
 import { GetProductsPrice } from '../../src/types/Products';
 import { ProductData } from './product';
@@ -85,6 +86,14 @@ export class OrderData {
         }),
         {}
       )
+    };
+  }
+
+  static get(d?: Partial<GetOrder>): GetOrder {
+    return {
+      user_id: faker.internet.userName(),
+      order_id: this._id(),
+      ...d
     };
   }
 }
