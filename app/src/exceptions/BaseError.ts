@@ -12,7 +12,7 @@ export class BaseError extends Error {
 
   constructor({ code, message }: CodeMessage, status: StatusCodes) {
     super(message);
-    this.name = 'BaseError';
+    this.name = this.constructor.name;
     this.message = message;
     this.code = code;
     this.status = status;

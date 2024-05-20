@@ -13,6 +13,7 @@ export type CreateOrderArgs = {
   stock_base_url: string;
   products_base_url: string;
   event_bus_topic: string;
+  request_id: string;
 };
 
 export type CreateOrder = z.infer<typeof create_order_body_schema> & z.infer<typeof user_id_schema>;

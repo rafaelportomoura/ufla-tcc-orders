@@ -32,7 +32,8 @@ const map_order = (order: Order): OrderInResponse => ({
 });
 
 export async function create(req: FastifyRequest, res: FastifyReply): Promise<CreateOrderResponse | BaseError> {
-  const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id(req));
+  const req_id = request_id(req);
+  const logger = new Logger(CONFIGURATION.LOG_LEVEL, req_id);
   try {
     const urls = URLS(CONFIGURATION);
     const business = new CreateOrderBusiness({
@@ -40,7 +41,8 @@ export async function create(req: FastifyRequest, res: FastifyReply): Promise<Cr
       event_bus_topic: CONFIGURATION.EVENT_BUS,
       aws_params: aws_params(),
       stock_base_url: urls.STOCKS,
-      products_base_url: urls.PRODUCTS
+      products_base_url: urls.PRODUCTS,
+      request_id: req_id
     });
     const { user_id } = await Validator.validate(req.headers, user_id_schema);
     const body = await Validator.validate(req.body, create_order_body_schema);

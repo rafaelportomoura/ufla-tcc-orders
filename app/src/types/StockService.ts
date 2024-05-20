@@ -5,6 +5,7 @@ import { CreateOrderProducts } from './CreateOrder';
 export type StockServiceConstructor = {
   base_url: string;
   logger: Logger;
+  request_id: string;
 };
 
 export type ReserveRequest = {

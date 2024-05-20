@@ -24,6 +24,7 @@ Parameters:
           - info
           - verbose
           - debug
+          - silent
     DomainName:
         Type: String
     HostedZone:

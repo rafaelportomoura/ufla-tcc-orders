@@ -18,10 +18,10 @@ export class CreateOrderBusiness {
 
   private logger: Logger;
 
-  constructor({ aws_params, logger, stock_base_url, products_base_url, event_bus_topic }: CreateOrderArgs) {
+  constructor({ aws_params, logger, stock_base_url, products_base_url, event_bus_topic, request_id }: CreateOrderArgs) {
     this.order_repository = new OrderRepository(aws_params, logger);
-    this.stock_service = new StockService({ base_url: stock_base_url, logger });
-    this.product_service = new ProductsService({ base_url: products_base_url, logger });
+    this.stock_service = new StockService({ base_url: stock_base_url, logger, request_id });
+    this.product_service = new ProductsService({ base_url: products_base_url, logger, request_id });
     this.event_bus = new EventBus(logger, event_bus_topic, aws_params);
     this.logger = logger;
   }

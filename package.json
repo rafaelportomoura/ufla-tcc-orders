@@ -14,8 +14,8 @@
     }
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=test ts-mocha app/tests/*.ts --timeout 400000",
-    "test:cov": "cross-env NODE_ENV=test nyc ts-mocha app/tests/*.ts --timeout 400000",
+    "test": "cross-env NODE_ENV=test ts-mocha",
+    "test:cov": "cross-env NODE_ENV=test nyc ts-mocha",
     "prepare": "husky install",
     "lint": "eslint --ext .ts . --max-warnings=0",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
@@ -27,6 +27,7 @@
     "@aws-sdk/client-sns": "^3.485.0",
     "@aws-sdk/client-ssm": "^3.499.0",
     "@aws-sdk/credential-providers": "^3.499.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "axios": "^1.6.7",
     "fastify": "^4.25.2",
     "fastify-qs": "^4.0.2",
@@ -38,6 +39,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/aws-lambda": "^8.10.137",
     "@types/chai": "^4.3.9",
     "@types/lodash": "^4.14.202",

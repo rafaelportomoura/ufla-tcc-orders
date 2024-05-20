@@ -18,6 +18,7 @@ Parameters:
           - info
           - verbose
           - debug
+          - silent
     MinContainers:
         Type: Number
         Description: Min containers to scale to

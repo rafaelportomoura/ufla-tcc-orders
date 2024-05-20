@@ -1,4 +1,5 @@
-import { randomUUID } from 'crypto';
+import { createId } from '@paralleldrive/cuid2';
 import { FastifyRequest } from 'fastify';
 
-export const request_id = (req: FastifyRequest): string => (req.headers.requestId as string) ?? randomUUID();
+export const request_id = ({ headers = {} }: Pick<FastifyRequest, 'headers'>): string =>
+  (headers.request_id as string) ?? createId();

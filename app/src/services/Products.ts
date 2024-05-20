@@ -18,9 +18,9 @@ export class ProductsService {
 
   private logger: Logger;
 
-  constructor({ base_url, logger }: ProductServiceConstructor) {
+  constructor({ base_url, logger, request_id }: ProductServiceConstructor) {
     this.logger = logger;
-    this.api = new Api({ baseURL: base_url });
+    this.api = new Api(request_id, { baseURL: base_url });
   }
 
   async getProductsPrice(product_ids: Array<Product['_id']>): Promise<GetProductsPrice> {

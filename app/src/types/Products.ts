@@ -5,6 +5,7 @@ import { Sort, SortBy } from './Search';
 export type ProductServiceConstructor = {
   base_url: string;
   logger: Logger;
+  request_id: string;
 };
 
 export type Product = {

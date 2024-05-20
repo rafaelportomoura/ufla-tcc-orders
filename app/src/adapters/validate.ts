@@ -8,6 +8,6 @@ export class Validator {
 
     if (result.success) return result.data;
 
-    throw new ValidationError(result.error.formErrors);
+    throw new ValidationError(result.error.formErrors.fieldErrors);
   }
 }

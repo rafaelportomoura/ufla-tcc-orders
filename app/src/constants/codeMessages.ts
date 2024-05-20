@@ -60,5 +60,9 @@ export const CODE_MESSAGES = {
   REJECTED: {
     code: prefix(n++),
     message: 'The order was rejected!'
+  },
+  FORBIDDEN: {
+    code: prefix(n++),
+    message: "User can't access this resource!"
   }
 } as const;

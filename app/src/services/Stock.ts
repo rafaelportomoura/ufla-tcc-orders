@@ -10,8 +10,8 @@ export class StockService {
 
   private logger: Logger;
 
-  constructor({ base_url, logger }: StockServiceConstructor) {
-    this.api = new Api({ baseURL: base_url });
+  constructor({ base_url, logger, request_id }: StockServiceConstructor) {
+    this.api = new Api(request_id, { baseURL: base_url });
     this.logger = logger;
   }
 

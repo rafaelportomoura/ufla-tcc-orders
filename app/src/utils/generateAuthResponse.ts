@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { randomUUID } from 'crypto';
+
 export class GenerateAuthResponse {
   static success(decoded_token: any, arn: string): unknown {
     const policy_document = this.generatePolicyDocument('Allow', arn);
@@ -10,10 +12,14 @@ export class GenerateAuthResponse {
     };
   }
 
-  static error(cognito_id: string, arn: string): unknown {
+  static error(cognito_id: string | undefined, arn: string): unknown {
     const policy_document = this.generatePolicyDocument('Deny', arn);
 
-    return { principalId: cognito_id, policyDocument: policy_document };
+    return { principalId: cognito_id ?? this.defaultSub(), policyDocument: policy_document };
+  }
+
+  static defaultSub(): string {
+    return randomUUID();
   }
 
   static generatePolicyDocument(effect: string, arn: string) {

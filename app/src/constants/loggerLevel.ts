@@ -6,7 +6,8 @@ export enum LoggerLevel {
   warn = 'warn',
   info = 'info',
   log = 'log',
-  error = 'error'
+  error = 'error',
+  silent = 'silent'
 }
 
 export const LoggerLevelTier = {
