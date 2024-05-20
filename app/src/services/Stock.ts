@@ -22,7 +22,7 @@ export class StockService {
       return response.reserves;
     } catch (error) {
       this.logger.error(error, 'StockService.reserve');
-      if (error.response.data.product_ids) {
+      if (error.response?.data.product_ids) {
         throw new ReserveStockError(error.response.data.product_ids);
       }
 
