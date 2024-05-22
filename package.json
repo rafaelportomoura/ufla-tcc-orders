@@ -36,6 +36,7 @@
     "mongoose": "^8.1.1",
     "path-to-regexp": "^6.2.2",
     "qs": "^6.11.2",
+    "tslib": "^2.6.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -68,7 +69,6 @@
     "prettier": "^3.0.3",
     "sinon": "^17.0.1",
     "ts-mocha": "^10.0.0",
-    "tslib": "^2.6.2",
     "tsx": "^4.7.0",
     "typescript": "^5.2.2"
   },

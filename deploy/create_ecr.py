@@ -2,6 +2,8 @@ from scripts.typescript import Typescript
 from scripts.cloudformation import CloudFormation
 from scripts.args import get_args
 from stacks import ecr
+from stacks.ecs import my_stack_name as ecs_stack_name
+from scripts.ecs import ECS
 from scripts.exception import DeployException
 from scripts.docker import Docker
 
@@ -40,5 +42,12 @@ if not cloudformation.stack_is_succesfully_deployed(stack_name=ECR_STACK["stack_
 
 ecr_uri = docker.ecr_uri(account_id=account_id, region=region)
 typescript.build()
-image=f"{stage}-{tenant}-{microservice}"
-docker.build_and_push(ecr_uri=ecr_uri,region=region, image=image, tag="latest")
+image = f"{stage}-{tenant}-{microservice}"
+docker.build_and_push(ecr_uri=ecr_uri, region=region, image=image, tag="latest")
+
+
+ecs_stack_name_ = ecs_stack_name(stage=stage, tenant=tenant)
+ecs = ECS(profile=profile, region=region, log_level=log_level)
+ecs.force_stack_new_deployment(
+    cloudformation=cloudformation, stack_name=ecs_stack_name_
+)
