@@ -63,7 +63,7 @@ Resources:
             PayloadFormatVersion: "1.0"
             RequestParameters:
                 append:header.microservice: !Ref Microservice
-                append:header.requestId: $context.requestId
+                append:header.request_id: $context.requestId
                 overwrite:path: '$request.path'
                 append:header.stage: !Ref Stage
                 append:header.tenant: !Ref Tenant
