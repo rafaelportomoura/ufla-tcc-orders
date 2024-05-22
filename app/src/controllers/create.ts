@@ -47,6 +47,7 @@ export async function create(
       products_base_url: urls.PRODUCTS,
       request_id: req_id
     });
+    logger.debug('Headers', req.headers);
     const { username } = await Validator.validate(req.headers, username_schema);
     const body = await Validator.validate(req.body, create_order_body_schema);
     const order = await business.create({ ...body, username });
