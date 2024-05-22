@@ -6,7 +6,7 @@ export class GenerateAuthResponse {
     const policy_document = this.generatePolicyDocument('Allow', arn);
 
     return {
-      context: { headers: JSON.stringify({ username: decoded_token.username }) },
+      context: { username: decoded_token.username },
       principalId: decoded_token.sub,
       policyDocument: policy_document
     };
