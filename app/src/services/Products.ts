@@ -30,7 +30,7 @@ export class ProductsService {
       page: 1,
       size: product_ids.length
     });
-    this.logger.info({ product_ids, products }, 'ProductsService.getProductsPrice');
+    this.logger.info('ProductsService.getProductsPrice', { product_ids, products });
     if (products.length < product_ids.length)
       throw new ProductsNotFound(product_ids.filter((id) => products.every(({ _id }) => _id !== id)));
     return products;
@@ -42,7 +42,7 @@ export class ProductsService {
 
       return response;
     } catch (error) {
-      this.logger.error(error, 'Products.list');
+      this.logger.error('Products.list', error.message, error?.response?.data, error);
 
       throw new InternalServerError(CODE_MESSAGES.ERROR_CALLING_LIST_PRODUCT_API);
     }
