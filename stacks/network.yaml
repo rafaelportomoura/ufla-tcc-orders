@@ -64,6 +64,7 @@ Resources:
             RequestParameters:
                 append:header.microservice: !Ref Microservice
                 append:header.request_id: $context.requestId
+                append:header.username: $context.authorizer.username
                 overwrite:path: '$request.path'
                 append:header.stage: !Ref Stage
                 append:header.tenant: !Ref Tenant
