@@ -21,7 +21,7 @@ export class StockService {
       this.logger.info({ products, reserves: response.reserves }, 'StockService.reserve');
       return response.reserves;
     } catch (error) {
-      this.logger.error(error, 'StockService.reserve');
+      this.logger.error('StockService.reserve', error.message, error?.response?.data, error);
       if (error.response?.data.product_ids) {
         throw new ReserveStockError(error.response.data.product_ids);
       }
