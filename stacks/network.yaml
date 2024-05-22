@@ -75,7 +75,8 @@ Resources:
             ApiId: !Ref Api
             RouteKey: POST /
             Target: !Sub integrations/${Integration}
-            AuthorizationType: NONE
+            AuthorizationType: CUSTOM
+            AuthorizerId: !Ref Authorizer
 
     ApproveRoute:
         Type: AWS::ApiGatewayV2::Route

@@ -33,4 +33,9 @@ describe('Business -> Authorizer', async () => {
       expect(err).deep.equal(new ForbiddenError(decoded_token));
     }
   });
+  it('should allow create', async () => {
+    const response = Authorizer.validate(AuthorizerData.create(), AuthorizerData.decodedToken('user'));
+
+    expect(response).equal(undefined);
+  });
 });

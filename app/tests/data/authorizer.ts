@@ -58,6 +58,6 @@ export class AuthorizerData {
   }
 
   static allowPolicyDocument(username: string, sub: string, arn: string): unknown {
-    return { ...this.policyDocument('Allow', sub, arn), context: { headers: JSON.stringify({ username }) } };
+    return { ...this.policyDocument('Allow', sub, arn), context: { username } };
   }
 }

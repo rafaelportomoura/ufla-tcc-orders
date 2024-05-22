@@ -10,6 +10,9 @@ export class Authorizer {
     const [_, __, method, ...path] = method_arn.split('/');
     const method_path = [method, ...path].join('/');
     const username = encodeURIComponent(decoded_token.username);
+
+    if (pathToRegexp(`POST/`).test(method_path)) return;
+
     if (pathToRegexp(`GET/users/${username}`).test(method_path)) return;
 
     if (pathToRegexp(`GET/:order_id/users/${username}`).test(method_path)) return;
