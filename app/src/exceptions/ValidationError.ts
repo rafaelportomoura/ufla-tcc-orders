@@ -2,7 +2,7 @@ import { CODE_MESSAGES } from '../constants/codeMessages';
 import { BadRequestError } from './BadRequestError';
 
 export class ValidationError extends BadRequestError {
-  public issues: unknown;
+  issues: unknown;
 
   constructor(issues: unknown) {
     super(CODE_MESSAGES.VALIDATION_ERROR);
