@@ -11,7 +11,10 @@ import { list_orders_schema } from '../schemas/list';
 import { ListOrdersResponse } from '../types/ListOrder';
 import { request_id } from '../utils/requestId';
 
-export async function list(req: FastifyRequest, res: FastifyReply): Promise<ListOrdersResponse | BaseError> {
+export async function list(
+  req: FastifyRequest,
+  res: FastifyReply
+): Promise<ListOrdersResponse | ReturnType<BaseError['toJSON']>> {
   const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id(req));
   try {
     const business = new ListOrders({
@@ -27,6 +30,6 @@ export async function list(req: FastifyRequest, res: FastifyReply): Promise<List
   } catch (error) {
     const response = error_handler(logger, error, 'list');
     res.status(response.status);
-    return response;
+    return response.toJSON();
   }
 }

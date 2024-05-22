@@ -12,7 +12,10 @@ import { order_id_schema } from '../schemas/order_id';
 import { CodeMessage } from '../types/CodeMessage';
 import { request_id } from '../utils/requestId';
 
-export async function reject(req: FastifyRequest, res: FastifyReply): Promise<CodeMessage | BaseError> {
+export async function reject(
+  req: FastifyRequest,
+  res: FastifyReply
+): Promise<CodeMessage | ReturnType<BaseError['toJSON']>> {
   const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id(req));
   try {
     const business = new RejectBusiness({
@@ -29,6 +32,6 @@ export async function reject(req: FastifyRequest, res: FastifyReply): Promise<Co
   } catch (error) {
     const response = error_handler(logger, error, 'reject');
     res.status(response.status);
-    return response;
+    return response.toJSON();
   }
 }

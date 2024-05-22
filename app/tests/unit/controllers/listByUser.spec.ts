@@ -39,6 +39,6 @@ describe('Controller -> ListByUser', async () => {
       { username: 'x' }
     );
     expect(res.status.args).deep.equal([[500]]);
-    expect(response).deep.equal(new InternalServerError(CODE_MESSAGES.INTERNAL_SERVER_ERROR));
+    expect(response).deep.equal(new InternalServerError(CODE_MESSAGES.INTERNAL_SERVER_ERROR).toJSON());
   });
 });

@@ -41,6 +41,6 @@ describe('Controller -> Create', async () => {
     const { username, products } = OrderData.create();
     const response = await controller({ products }, { username });
     expect(res.status.args).deep.equal([[500]]);
-    expect(response).deep.equal(new InternalServerError(CODE_MESSAGES.INTERNAL_SERVER_ERROR));
+    expect(response).deep.equal(new InternalServerError(CODE_MESSAGES.INTERNAL_SERVER_ERROR).toJSON());
   });
 });

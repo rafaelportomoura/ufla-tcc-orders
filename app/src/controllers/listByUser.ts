@@ -14,7 +14,10 @@ import { ListOrdersResponse } from '../types/ListOrder';
 import { SearchSchema } from '../types/Search';
 import { request_id } from '../utils/requestId';
 
-export async function listByUser(req: FastifyRequest, res: FastifyReply): Promise<ListOrdersResponse | BaseError> {
+export async function listByUser(
+  req: FastifyRequest,
+  res: FastifyReply
+): Promise<ListOrdersResponse | ReturnType<BaseError['toJSON']>> {
   const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id(req));
   try {
     const business = new ListOrders({
@@ -33,6 +36,6 @@ export async function listByUser(req: FastifyRequest, res: FastifyReply): Promis
   } catch (error) {
     const response = error_handler(logger, error, 'listByUser');
     res.status(response.status);
-    return response;
+    return response.toJSON();
   }
 }

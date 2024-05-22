@@ -11,7 +11,7 @@ import { get_order_schema } from '../schemas/get_order';
 import { Order } from '../types/Order';
 import { request_id } from '../utils/requestId';
 
-export async function get(req: FastifyRequest, res: FastifyReply): Promise<Order | BaseError> {
+export async function get(req: FastifyRequest, res: FastifyReply): Promise<Order | ReturnType<BaseError['toJSON']>> {
   const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id(req));
   try {
     const business = new GetOrderBusiness({
@@ -28,6 +28,6 @@ export async function get(req: FastifyRequest, res: FastifyReply): Promise<Order
   } catch (error) {
     const response = error_handler(logger, error, 'get');
     res.status(response.status);
-    return response;
+    return response.toJSON();
   }
 }

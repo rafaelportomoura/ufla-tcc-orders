@@ -31,7 +31,10 @@ const map_order = (order: Order): OrderInResponse => ({
   )
 });
 
-export async function create(req: FastifyRequest, res: FastifyReply): Promise<CreateOrderResponse | BaseError> {
+export async function create(
+  req: FastifyRequest,
+  res: FastifyReply
+): Promise<CreateOrderResponse | ReturnType<BaseError['toJSON']>> {
   const req_id = request_id(req);
   const logger = new Logger(CONFIGURATION.LOG_LEVEL, req_id);
   try {
@@ -57,6 +60,6 @@ export async function create(req: FastifyRequest, res: FastifyReply): Promise<Cr
   } catch (error) {
     const response = error_handler(logger, error, 'create');
     res.status(response.status);
-    return response;
+    return response.toJSON();
   }
 }
