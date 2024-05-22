@@ -71,7 +71,7 @@ export const OPERATORS_MAP_TO_SCHEMA = <T extends ZodTypeAny>(v: T) => ({
 
 export const PRODUCT_SORT_BY = ['name', 'status', 'created_at', 'price'] as const;
 
-export const ORDER_SORT_BY = ['created_at', 'updated_at', 'user_id'];
+export const ORDER_SORT_BY = ['created_at', 'updated_at', 'username'];
 
 export const SORT_KEY = {
   ASC: 'asc',

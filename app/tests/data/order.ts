@@ -15,7 +15,7 @@ export class OrderData {
 
   static create(d?: Partial<CreateOrder>): CreateOrder {
     return {
-      user_id: faker.internet.userName(),
+      username: faker.internet.userName(),
       products: {
         [ProductData._id()]: faker.number.int({ min: 1 })
       },
@@ -23,9 +23,9 @@ export class OrderData {
     };
   }
 
-  static createToOrder({ products, user_id }: CreateOrder, product_prices: GetProductsPrice): Order {
+  static createToOrder({ products, username }: CreateOrder, product_prices: GetProductsPrice): Order {
     return this.order({
-      user_id,
+      username,
       price_total: product_prices.reduce((a, { _id, price }) => a + products[_id] * price, 0),
       products: Object.keys(products).reduce(
         (a, _id) => ({
@@ -48,7 +48,7 @@ export class OrderData {
         [ProductData._id()]: this.product()
       },
       price_total: faker.number.float({ multipleOf: 0.01 }),
-      user_id: faker.internet.userName(),
+      username: faker.internet.userName(),
       ...d
     };
   }
@@ -94,7 +94,7 @@ export class OrderData {
 
   static get(d?: Partial<GetOrder>): GetOrder {
     return {
-      user_id: faker.internet.userName(),
+      username: faker.internet.userName(),
       order_id: this._id(),
       ...d
     };

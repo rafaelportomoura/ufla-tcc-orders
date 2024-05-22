@@ -10,7 +10,7 @@ import { URLS } from '../constants/urls';
 import { BaseError } from '../exceptions/BaseError';
 import { error_handler } from '../middlewares/error';
 import { create_order_body_schema } from '../schemas/create';
-import { user_id_schema } from '../schemas/user_id';
+import { username_schema } from '../schemas/username';
 import { CreateOrderResponse, OrderInResponse } from '../types/CreateOrder';
 import { Order } from '../types/Order';
 import { request_id } from '../utils/requestId';
@@ -44,9 +44,9 @@ export async function create(req: FastifyRequest, res: FastifyReply): Promise<Cr
       products_base_url: urls.PRODUCTS,
       request_id: req_id
     });
-    const { user_id } = await Validator.validate(req.headers, user_id_schema);
+    const { username } = await Validator.validate(req.headers, username_schema);
     const body = await Validator.validate(req.body, create_order_body_schema);
-    const order = await business.create({ ...body, user_id });
+    const order = await business.create({ ...body, username });
 
     const response = {
       order: map_order(order),

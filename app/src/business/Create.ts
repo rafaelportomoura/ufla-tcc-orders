@@ -43,7 +43,7 @@ export class CreateOrderBusiness {
 
     this.logger.info({ products, price_total }, 'CreateOrderBusiness.create');
 
-    const order = await this.order_repository.create({ user_id: raw_order.user_id, products, price_total });
+    const order = await this.order_repository.create({ username: raw_order.username, products, price_total });
 
     const message_attributes = this.event_bus.messageAttributes(EVENT_TYPE.CREATE, EVENT_STATUS.SUCCESS);
     await this.event_bus.pub(order, message_attributes);

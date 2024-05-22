@@ -27,7 +27,7 @@ describe('Controller -> ListByUser', async () => {
     business.resolves(order);
     const response = await controller(
       SearchData.filter({ search: undefined, sort_by: 'created_at', sort: SORT_KEY.ASC }),
-      { user_id: 'x' }
+      { username: 'x' }
     );
     expect(res.status.args).deep.equal([[200]]);
     expect(response).deep.equal(order);
@@ -36,7 +36,7 @@ describe('Controller -> ListByUser', async () => {
     business.rejects(new Error());
     const response = await controller(
       SearchData.filter({ search: undefined, sort_by: 'created_at', sort: SORT_KEY.ASC }),
-      { user_id: 'x' }
+      { username: 'x' }
     );
     expect(res.status.args).deep.equal([[500]]);
     expect(response).deep.equal(new InternalServerError(CODE_MESSAGES.INTERNAL_SERVER_ERROR));

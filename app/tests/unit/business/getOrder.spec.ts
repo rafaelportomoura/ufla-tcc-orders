@@ -20,13 +20,13 @@ describe('Business -> GetOrder', async () => {
   it('should get order', async () => {
     const order = OrderData.order();
     find_one.resolves(order);
-    const response = await business.get({ order_id: order._id, user_id: order.user_id });
+    const response = await business.get({ order_id: order._id, username: order.username });
     expect(response).deep.equal(order);
   });
 
   it('should throw NotFoundError when not found order', async () => {
     find_one.resolves();
-    const response = await business.get({ order_id: '', user_id: '' }).catch((c) => c);
+    const response = await business.get({ order_id: '', username: '' }).catch((c) => c);
     expect(response).deep.equal(new NotFoundError(CODE_MESSAGES.NOT_FOUND_ERROR));
   });
 });

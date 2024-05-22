@@ -16,7 +16,7 @@ export type Order = {
   updated_at: Date;
   status: OrderStatus;
   price_total: number;
-  user_id: string;
+  username: string;
 };
 
 export type RawOrder = Omit<Order, '_id' | 'created_at' | 'updated_at' | 'status'>;

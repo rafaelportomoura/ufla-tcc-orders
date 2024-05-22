@@ -11,7 +11,7 @@ export function router(server: FastifyInstance, _: FastifyRegisterOptions<Fastif
   server.post('/reject', reject);
   server.post('/approve', approve);
   server.get('/', list);
-  server.get('/users/:user_id', listByUser);
-  server.get('/:order_id/users/:user_id', get);
+  server.get('/users/:username', listByUser);
+  server.get('/:order_id/users/:username', get);
   done();
 }

@@ -8,7 +8,7 @@ const order_schema = new Schema<Order>(
     products: Schema.Types.Mixed,
     status: { type: String, enum: STATUS, index: true, default: STATUS_MAP.PENDING },
     price_total: { type: Number, required: true },
-    user_id: { type: String, required: true }
+    username: { type: String, required: true }
   },
   {
     timestamps: {

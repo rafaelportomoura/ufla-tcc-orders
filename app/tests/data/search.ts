@@ -25,13 +25,13 @@ export class SearchData {
 
   static search(
     d?: DeepPartial<Search>,
-    selected: string[] = ['user_id', 'status', 'products', 'price_total']
+    selected: string[] = ['username', 'status', 'products', 'price_total']
   ): Search {
     const s: DeepPartial<Search> = {
       status: this.operators(OrderData.status(), {}, ['ne']),
       products: this.operators(ProductData._id(), {}, ['has']),
       price_total: this.operators(faker.number.float({ multipleOf: 0.01 }), {}, ['gte']),
-      user_id: this.operators(faker.internet.userName(), {}, ['eq']),
+      username: this.operators(faker.internet.userName(), {}, ['eq']),
       ...d
     };
     const response = Object.entries(s).reduce(
@@ -65,7 +65,7 @@ export class SearchData {
       _id: 1,
       price_total: 1,
       products: 1,
-      user_id: 1,
+      username: 1,
       status: 1,
       created_at: 1,
       updated_at: 1,
@@ -73,8 +73,8 @@ export class SearchData {
     };
   }
 
-  static sortBy(): 'created_at' | 'updated_at' | 'status' | 'user_id' {
-    const a = ['created_at', 'updated_at', 'status', 'user_id'] as const;
+  static sortBy(): 'created_at' | 'updated_at' | 'status' | 'username' {
+    const a = ['created_at', 'updated_at', 'status', 'username'] as const;
     return a[faker.number.int({ min: 0, max: a.length - 1 })];
   }
 }

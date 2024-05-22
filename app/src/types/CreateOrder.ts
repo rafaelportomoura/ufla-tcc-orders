@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { Logger } from '../adapters/logger';
 import { create_order_body_schema } from '../schemas/create';
-import { user_id_schema } from '../schemas/user_id';
+import { username_schema } from '../schemas/username';
 import { AwsParams } from './Aws';
 import { CodeMessage } from './CodeMessage';
 import { Product } from './Products';
@@ -15,7 +15,7 @@ export type CreateOrderArgs = {
   request_id: string;
 };
 
-export type CreateOrder = z.infer<typeof create_order_body_schema> & z.infer<typeof user_id_schema>;
+export type CreateOrder = z.infer<typeof create_order_body_schema> & z.infer<typeof username_schema>;
 export type CreateOrderProducts = CreateOrder['products'];
 
 export type OrderInResponse = {

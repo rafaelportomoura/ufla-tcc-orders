@@ -106,7 +106,7 @@ Resources:
         Type: AWS::ApiGatewayV2::Route
         Properties:
             ApiId: !Ref Api
-            RouteKey: GET /users/{user_id}
+            RouteKey: GET /users/{username}
             Target: !Sub integrations/${Integration}
             AuthorizationType: CUSTOM
             AuthorizerId: !Ref Authorizer
@@ -115,7 +115,7 @@ Resources:
         Type: AWS::ApiGatewayV2::Route
         Properties:
             ApiId: !Ref Api
-            RouteKey: GET /{order_id}/users/{user_id}
+            RouteKey: GET /{order_id}/users/{username}
             Target: !Sub integrations/${Integration}
             AuthorizationType: CUSTOM
             AuthorizerId: !Ref Authorizer

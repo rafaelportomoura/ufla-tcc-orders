@@ -11,8 +11,8 @@ export class GetOrderBusiness {
     this.order_repository = new OrderRepository(aws_params, logger);
   }
 
-  async get({ order_id, user_id }: GetOrder): Promise<Order> {
-    const order = await this.order_repository.findOne({ _id: order_id, user_id });
+  async get({ order_id, username }: GetOrder): Promise<Order> {
+    const order = await this.order_repository.findOne({ _id: order_id, username });
 
     if (!order) {
       throw new NotFoundError(CODE_MESSAGES.NOT_FOUND_ERROR);

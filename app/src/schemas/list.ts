@@ -11,7 +11,7 @@ export const common_search_schema = z.object({
 
 export const list_orders_search_schema = common_search_schema.merge(
   z.object({
-    user_id: search_attribute_schema(z.string(), ...STRING_OPERATORS).optional()
+    username: search_attribute_schema(z.string(), ...STRING_OPERATORS).optional()
   })
 );
 
@@ -19,7 +19,7 @@ export const list_orders_project_schema = project_schema(
   'products',
   'status',
   'price_total',
-  'user_id',
+  'username',
   '_id',
   'created_at',
   'updated_at'
@@ -31,4 +31,4 @@ export const list_orders_schema = z
     project: list_orders_project_schema.optional()
   })
   .merge(pagination_schema)
-  .merge(sort_schema(['created_at', 'updated_at', 'status', 'user_id']));
+  .merge(sort_schema(['created_at', 'updated_at', 'status', 'username']));
