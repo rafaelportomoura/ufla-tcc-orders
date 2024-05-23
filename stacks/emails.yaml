@@ -39,7 +39,7 @@ Resources:
         Type: AWS::SES::Template
         Properties:
             Template: 
-                HtmlPart: O seu pedido {{order._id}} foi aprovado!
+                HtmlPart: O seu pedido {{order_id}} foi aprovado!
                 SubjectPart: O seu pedido foi aprovado!
                 TemplateName: !Sub ${Stage}-${Tenant}${Microservice}-order-approval
                 TextPart: O seu pedido foi aprovado!

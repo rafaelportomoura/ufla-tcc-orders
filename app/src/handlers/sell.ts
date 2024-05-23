@@ -31,7 +31,7 @@ export async function sell(event: SQSEvent): Promise<void> {
       logger,
       template: CONFIGURATION.SELL_TEMPLATE
     });
-    await business.send(order.username, { stock_ids, order });
+    await business.send(order.username, order._id);
   } catch (error) {
     logger.error('Handler', error.message, error);
     throw error;

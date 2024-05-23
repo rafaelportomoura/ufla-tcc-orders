@@ -11,9 +11,9 @@ export class SendSellEmail {
     this.template = args.template;
   }
 
-  async send(username: string, properties: Record<string, unknown>): Promise<void> {
+  async send(username: string, order_id: string): Promise<void> {
     await this.contact_bridge.sendEmail({
-      properties,
+      properties: { order_id },
       to: [await this.contact_bridge.getEmailByUsername(username)],
       template: this.template
     });
