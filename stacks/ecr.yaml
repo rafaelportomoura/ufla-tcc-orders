@@ -36,10 +36,3 @@ Resources:
                 Value: !Ref Tenant
               - Key: Name
                 Value: !Sub ${Stage}-${Tenant}-${Microservice}
-
-Outputs:
-    RepositoryUri:
-        Description: The repository uri
-        Value: !GetAtt Repository.RepositoryUri
-        Export:
-            Name: !Sub ${Stage}-${Tenant}-${Microservice}-ecr-repository-uri
