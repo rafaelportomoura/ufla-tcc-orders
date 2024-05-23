@@ -215,3 +215,24 @@ Resources:
             Endpoint: !GetAtt SellSQS.Arn
             Protocol: sqs
             FilterPolicy: '{"type": ["sold"], "status": ["success"], "event": ["stocks"]}'
+
+    QueuePolicy:
+        Type: AWS::SQS::QueuePolicy
+        Properties:
+            Queues:
+              - !Ref SellSQS
+            PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                  - Sid: !Sub ${Stage}-${Tenant}-${Microservice}-sell-sqs
+                    Effect: Allow
+                    Action:
+                      - sqs:SendMessage
+                    Principal:
+                        Service:
+                          - "sns.amazonaws.com"
+                    Resource: !GetAtt SellSQS.Arn
+                    Condition:
+                        ArnEquals:
+                            aws:SourceArn:
+                                Fn::ImportValue: !Sub ${Stage}-${Tenant}-event-bus
