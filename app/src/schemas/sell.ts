@@ -15,7 +15,7 @@ export const sell_schema = z.object({
     created_at: z.string(),
     updated_at: z.string(),
     status: z.string(),
-    price_total: z.number().int().positive(),
+    price_total: z.number().positive(),
     username: z.string()
   })
 });
