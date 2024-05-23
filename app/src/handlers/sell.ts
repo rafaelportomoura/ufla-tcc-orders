@@ -17,6 +17,7 @@ export async function sell(event: SQSEvent): Promise<void> {
   const request_id = sqs_request_id(record);
   const logger = new Logger(CONFIGURATION.LOG_LEVEL, request_id);
   try {
+    logger.debug('Handler', 'sell', 'event', event, 'record', record);
     let body = JSON.parse(record.body);
     if ((body as SNSEventRecord['Sns']).TopicArn) body = JSON.parse(body.Message);
     const { stock_ids, order } = await Validator.validate(body, sell_schema);
