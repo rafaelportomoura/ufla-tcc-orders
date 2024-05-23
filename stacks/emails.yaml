@@ -214,4 +214,4 @@ Resources:
                 Fn::ImportValue: !Sub ${Stage}-${Tenant}-event-bus
             Endpoint: !GetAtt SellSQS.Arn
             Protocol: sqs
-            FilterPolicy: '{"type": ["approved"], "status": ["success"], "event": ["orders"]}'
+            FilterPolicy: '{"type": ["sold"], "status": ["success"], "event": ["stocks"]}'
