@@ -74,6 +74,7 @@ Resources:
                           - lambda:InvokeFunction
                           - apigateway:*
                           - sns:Publish
+                          - sqs:SendMessage
                         Resource: "*"
             Tags:
               - Key: Service
