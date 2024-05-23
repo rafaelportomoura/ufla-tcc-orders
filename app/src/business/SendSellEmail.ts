@@ -1,4 +1,4 @@
-import { ContactBridge } from '../services/SendEmail';
+import { ContactBridge } from '../services/ContactBridge';
 import { SendSellEmailArgs } from '../types/SendSellEmail';
 
 export class SendSellEmail {

@@ -8,8 +8,8 @@ import { SendSellEmail } from '../business/SendSellEmail';
 import { CONFIGURATION } from '../constants/configuration';
 import { URLS } from '../constants/urls';
 import { sell_schema } from '../schemas/sell';
+import { ContactBridge } from '../services/ContactBridge';
 import { OAuthService } from '../services/OAuth';
-import { ContactBridge } from '../services/SendEmail';
 import { sqs_request_id } from '../utils/sqs_id';
 
 export async function sell(event: SQSEvent): Promise<void> {
