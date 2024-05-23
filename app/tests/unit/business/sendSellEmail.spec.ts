@@ -42,8 +42,8 @@ describe('Business -> SendSellEmail', () => {
 
       await send_sell_email_service.send(username, order_id);
 
-      expect(contact_bridge_stub.getEmailByUsername.calledOnceWith(username)).to.be.true;
-      expect(contact_bridge_stub.sendEmail.calledOnceWith(send_email_params)).to.be.true;
+      expect(contact_bridge_stub.getEmailByUsername.calledOnceWith(username)).equal(true);
+      expect(contact_bridge_stub.sendEmail.calledOnceWith(send_email_params)).equal(true);
     });
   });
 });
