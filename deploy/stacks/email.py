@@ -13,7 +13,7 @@ def stack(
     log_level: str,
 ) -> Stack:
     return Stack(
-        template=path("stacks", "ecr.yaml"),
+        template=path("stacks", "email.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
             "Stage": stage,
