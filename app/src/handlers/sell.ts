@@ -20,7 +20,7 @@ export async function sell(event: SQSEvent): Promise<void> {
     logger.debug('Handler', 'sell', 'event', event, 'record', record);
     let body = JSON.parse(record.body);
     if ((body as SNSEventRecord['Sns']).TopicArn) body = JSON.parse(body.Message);
-    const { stock_ids, order } = await Validator.validate(body, sell_schema);
+    const { order } = await Validator.validate(body, sell_schema);
     const sqs = new SQS(CONFIGURATION.EMAIL_SQS, aws_config(aws_params()));
     const business = new SendSellEmail({
       contact: new ContactBridge({
