@@ -13,7 +13,7 @@ args = get_args(
         "region": {"type": "str", "required": False, "default": "us-east-2"},
         "profile": {"type": "str", "required": False, "default": "default"},
         "log_level": {"type": "int", "required": False, "default": 3},
-        "account_id": {"type": "str", "required": True},
+        "log_level_compute": {"type": "str", "required": False, "default": "debug"},
     }
 )
 
@@ -23,7 +23,6 @@ tenant = args["tenant"]
 region = args["region"]
 profile = args["profile"]
 log_level = args["log_level"]
-account_id = args["account_id"]
 
 cloudformation = CloudFormation(profile=profile, region=region, log_level=log_level)
 docker = Docker(log_level=log_level)
@@ -34,7 +33,7 @@ typescript.lambda_packages()
 ################################################
 # 🚀 EMAIL
 ################################################
-EMAIL = email.stack(stage=stage, tenant=tenant, microservice=microservice)
+EMAIL = email.stack(stage=stage, tenant=tenant, microservice=microservice, log_level=args["log_level_compute"],)
 cloudformation.deploy_stack(stack=EMAIL)
 
 if not cloudformation.stack_is_succesfully_deployed(stack_name=EMAIL["stack_name"]):

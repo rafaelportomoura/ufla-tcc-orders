@@ -10,6 +10,7 @@ def stack(
     stage: str,
     tenant: str,
     microservice: str,
+    log_level: str,
 ) -> Stack:
     return Stack(
         template=path("stacks", "ecr.yaml"),
@@ -17,6 +18,7 @@ def stack(
         parameters={
             "Stage": stage,
             "Tenant": tenant,
-            "Microservice": microservice
+            "Microservice": microservice,
+            "LogLevel": log_level,
         },
     )
