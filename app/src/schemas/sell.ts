@@ -6,10 +6,10 @@ export const sell_schema = z.object({
     _id: z.string(),
     products: z.record(
       z.object({
-        quantity: z.number().int().positive(),
-        price_unit: z.number().int().positive(),
-        price_total: z.number().int().positive(),
-        stocks_ids: z.number().int().positive().array()
+        quantity: z.number(),
+        price_unit: z.number(),
+        price_total: z.number(),
+        stocks_ids: z.number().array()
       })
     ),
     created_at: z.string(),
