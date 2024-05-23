@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Api } from '../adapters/api';
 import { CODE_MESSAGES } from '../constants/codeMessages';
 import { UnauthorizedError } from '../exceptions/Unauthorized';
+import { User } from '../types/User';
 import { ValidateToken } from '../types/ValidateToken';
 
 export class OAuthService {
@@ -21,5 +22,10 @@ export class OAuthService {
         throw new UnauthorizedError(CODE_MESSAGES.UNAUTHORIZED);
       throw error;
     }
+  }
+
+  async get(user: string): Promise<User> {
+    const response = await this.client.get<User>(`/users/${user}`);
+    return response;
   }
 }
