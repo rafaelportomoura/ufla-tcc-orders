@@ -31,7 +31,7 @@ Globals:
                 MICROSERVICE: !Ref Microservice
                 LOG_LEVEL: !Ref LogLevel
                 SELL_TEMPLATE: !Sub ${Stage}-${Tenant}${Microservice}-order-approval
-                EMAIL_SQS: !Sub ${Stage}-${Tenant}-contact-bridges-send-email-sqs
+                EMAIL_SQS: !Sub https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/${Stage}-${Tenant}-contact-bridges-send-email-sqs
 
 
 Resources:
