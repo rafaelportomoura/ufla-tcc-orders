@@ -34,7 +34,7 @@ typescript.lambda_packages()
 # 🚀 EMAIL
 ################################################
 EMAIL = email.stack(stage=stage, tenant=tenant, microservice=microservice, log_level=args["log_level_compute"],)
-cloudformation.deploy_stack(stack=EMAIL)
+cloudformation.package_and_deploy_stack(stack=EMAIL, output="stacks/output.yaml")
 
 if not cloudformation.stack_is_succesfully_deployed(stack_name=EMAIL["stack_name"]):
     raise DeployException(stack=EMAIL)
