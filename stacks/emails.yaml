@@ -214,7 +214,7 @@ Resources:
                 Fn::ImportValue: !Sub ${Stage}-${Tenant}-event-bus
             Endpoint: !GetAtt SellSQS.Arn
             Protocol: sqs
-            FilterPolicy: '{"type": ["sold"], "status": ["success"], "event": ["stocks"]}'
+            FilterPolicy: !Sub '{"type": ["approved"], "status": ["success"], "event": ["${Microservice}"]}'
 
     QueuePolicy:
         Type: AWS::SQS::QueuePolicy
